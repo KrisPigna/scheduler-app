@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { fetchAppointments } from '../../actions/appointmentActions';
 import { Calendar, Drawer, Button, Icon } from 'antd';
 import moment from 'moment';
 import './AppointmentCalendar.css'
 
-export default class AppointmentCalendar extends Component {
+class AppointmentCalendar extends Component {
     constructor(props) {
         super(props);
 
@@ -33,6 +35,7 @@ export default class AppointmentCalendar extends Component {
     componentDidMount() {
         console.log(this.state.value)
         window.addEventListener('resize', this.toggleFullscreen);
+        this.props.fetchAppointments();
     }
 
     componentWillUnmount() {
@@ -85,6 +88,8 @@ export default class AppointmentCalendar extends Component {
     render() {
         const ButtonGroup = Button.Group;
 
+        console.log(this.props.appointments);
+
         return (
             <div className="calendar-container">
                 <ButtonGroup>
@@ -114,3 +119,9 @@ export default class AppointmentCalendar extends Component {
         )
     }
 }
+
+const mapStateToProps = state => ({
+    appointments: state.appointments.appointments
+});
+
+export default connect(mapStateToProps, { fetchAppointments })(AppointmentCalendar);
