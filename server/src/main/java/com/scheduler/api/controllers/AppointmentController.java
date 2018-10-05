@@ -38,13 +38,14 @@ public class AppointmentController {
 	}
 	
 	@RequestMapping(value = "/change_appointment/{id}", method = RequestMethod.PUT)
-	public void modifyAppointmentById(@PathVariable("id") ObjectId id, @Valid @RequestBody Appointment appointment) {
+	public Appointment modifyAppointmentById(@PathVariable("id") ObjectId id, @Valid @RequestBody Appointment appointment) {
 		appointment.set_id(id);
-	    repository.save(appointment);
+	    return repository.save(appointment);
 	}
 	
 	@RequestMapping(value = "/delete_appointment/{id}", method = RequestMethod.DELETE)
-	public void delete(@PathVariable("id") ObjectId id) {
+	public String delete(@PathVariable("id") ObjectId id) {
 	   repository.delete(repository.findBy_id(id));
+	   return "{\"message\": \"Deleted\"}";
 	}
 }
