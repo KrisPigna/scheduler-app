@@ -1,0 +1,6 @@
+.date, .appointments {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    height: inherit;
+    width: inherit;
+}

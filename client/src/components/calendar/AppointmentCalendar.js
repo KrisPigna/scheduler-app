@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { fetchAppointments } from '../../actions/appointmentActions';
-import { Calendar, Drawer, Button, Icon } from 'antd';
+import { Calendar, Drawer, Button, Icon, Popover, Badge } from 'antd';
 import moment from 'moment';
 import './AppointmentCalendar.css'
 
@@ -15,6 +15,7 @@ class AppointmentCalendar extends Component {
         this.onOpen = this.onOpen.bind(this);
         this.nextMonth = this.nextMonth.bind(this);
         this.prevMonth = this.prevMonth.bind(this);
+        this.dateCellRender = this.dateCellRender.bind(this);
 
         let day = new Date();
         let dd = day.getDate();
@@ -22,8 +23,6 @@ class AppointmentCalendar extends Component {
         let yyyy = day.getFullYear();
 
         let today = yyyy + '-' + mm + '-0' + dd;
-
-        console.log(today);
 
         this.state = {
             fullscreen: true,
@@ -33,7 +32,7 @@ class AppointmentCalendar extends Component {
     }
 
     componentDidMount() {
-        console.log(this.state.value)
+        this.toggleFullscreen();
         window.addEventListener('resize', this.toggleFullscreen);
         this.props.fetchAppointments();
     }
@@ -48,17 +47,16 @@ class AppointmentCalendar extends Component {
         } else {
             this.setState({ fullscreen: true });
         }
-        console.log("event");
+        this.dateCellRender();
     }
 
     onPanelChange(value, mode) {
         console.log(value, mode);
-        this.setState({value: value})
+        this.setState({ value: value })
     }
 
-    onOpen(newValue) {
-        console.log(newValue);
-        this.setState({ showDrawer: true, value: newValue, selectedValue: newValue });
+    onOpen() {
+        this.setState({ showDrawer: true });
     }
 
     onClose() {
@@ -85,6 +83,39 @@ class AppointmentCalendar extends Component {
         this.setState({ value: moment(newValue) })
     }
 
+    dateCellRender(value) {
+        const dates = ["2018-10-09", "2018-10-23", "2018-10-31"];
+        let day = null;
+        if(value != undefined) {
+            day = value.format("YYYY-MM-DD");
+        }
+        if (this.state.fullscreen == true) {
+            if (dates.indexOf(day) > -1 ) {
+                return (
+                    <div className="date">
+                        <Popover placement="top" title="Details" content="Stuff" trigger="click">
+                            <ul className="appointments">
+                                <li>{day}</li>
+                            </ul>
+                        </Popover>
+                    </div>
+                );
+            }
+            
+        }
+        else {
+            if (dates.indexOf(day) > -1 ) {
+                return (
+                    <div>
+                        <Badge count={1} onClick={this.onOpen}/>
+                    </div>
+                );
+            }
+        }
+
+    }
+
+
     render() {
         const ButtonGroup = Button.Group;
 
@@ -101,13 +132,12 @@ class AppointmentCalendar extends Component {
                     </Button>
                 </ButtonGroup>
                 <Calendar
-                    value={this.state.value}
+                    dateCellRender={this.dateCellRender}
                     fullscreen={this.state.fullscreen}
-                    onSelect={this.onOpen}
                     onPanelChange={this.onPanelChange}
                 />
                 <Drawer
-                    title={this.state.selectedValue.format('MM-DD-YYYY')}
+                    title="Details"
                     placement="bottom"
                     closable={false}
                     onClose={this.onClose}
