@@ -27,10 +27,12 @@ class AppointmentForm extends Component {
         let today = yyyy + '-' + mm + '-0' + dd;
 
         this.state = {
+            title: "",
             startDate: today,
             startTime: "12:00am",
             endDate: today,
             endTime: "12:00am",
+            notes: "",
             attendee: "",
             showDrawer: false,
 
@@ -74,10 +76,15 @@ class AppointmentForm extends Component {
     handleSubmit(e) {
         e.preventDefault();
         let appointment = {
-            start: this.state.startDate + 'T' + this.state.startTime,
-            end: this.state.endDate + 'T' + this.state.endTime,
+            title: this.state.title,
+            startDate: this.state.startDate,
+            startTime: this.state.startTime,
+            endDate: this.state.endDate,
+            endTime: this.state.endTime,
+            notes: this.state.notes,
             attendees: [this.state.attendee]
         }
+
         console.log(JSON.stringify(appointment));
         this.props.createAppointment(appointment);
         this.onClose();
@@ -93,7 +100,7 @@ class AppointmentForm extends Component {
 
     render() {
         return (
-            <div>
+            <div className="appointment-form">
                 <Button onClick={this.onOpen}>New Appointment</Button>
                 <Drawer
                     title="New Appointment"
@@ -103,6 +110,14 @@ class AppointmentForm extends Component {
                     visible={this.state.showDrawer}
                 >
                     <Form onSubmit={this.handleSubmit}>
+                        <FormItem label="Title">
+                            <Input
+                                placeholder="Title"
+                                name="title"
+                                value={this.state.title}
+                                onChange={this.onChange}
+                            />
+                        </FormItem>
                         <FormItem label="Start">
                             <DatePicker
                                 format="YYYY-MM-DD"
@@ -135,11 +150,18 @@ class AppointmentForm extends Component {
                                 onChange={this.onChange}
                             />
                         </FormItem>
+                        <FormItem label="Notes">
+                            <Input.TextArea
+                                name="notes"
+                                value={this.state.notes}
+                                onChange={this.onChange}
+                            />
+                        </FormItem>
                         <FormItem>
                             <Button htmlType="submit">
                                 Create
                             </Button>
-                            <Button htmlType="submit" onClick={this.onClose}>
+                            <Button onClick={this.onClose}>
                                 Cancel
                             </Button>
                         </FormItem>

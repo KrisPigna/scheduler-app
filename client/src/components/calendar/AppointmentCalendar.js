@@ -26,8 +26,7 @@ class AppointmentCalendar extends Component {
 
         this.state = {
             fullscreen: true,
-            value: moment(today),
-            details: {}
+            value: moment(today)
         }
     }
 
@@ -100,7 +99,7 @@ class AppointmentCalendar extends Component {
         if (value != undefined && this.props.appointments[0] != undefined) {
             day = value.format("YYYY-MM-DD");
             this.props.appointments.forEach(appointment => {
-                if (appointment.start.substring(0,10) === day) {
+                if (appointment.startDate === day) {
                     details = appointment;
                     match = true;
                 }
@@ -108,9 +107,10 @@ class AppointmentCalendar extends Component {
         }
         if (this.state.fullscreen == true) {
             if (match === true) {
+                const content = <div>{details.title}</div>;
                 return (
                     <div className="date">
-                        <Popover placement="top" title={day} content={details.start} trigger="click">
+                        <Popover placement="top" title={day} content={content} trigger="click">
                             <ul className="appointments">
                                 <li>{day}</li>
                             </ul>
@@ -123,8 +123,17 @@ class AppointmentCalendar extends Component {
         else {
             if (match === true) {
                 return (
-                    <div value={details} onClick={this.onOpen}>
-                        <Badge count={1} />
+                    <div>
+                        <Badge count={1} onClick={this.onOpen}/>
+                        <Drawer
+                            title={day}
+                            placement="bottom"
+                            closable={false}
+                            onClose={this.onClose}
+                            visible={this.state.showDrawer}
+                        >
+                            {details.title}
+                        </Drawer>
                     </div>
                 );
             }
@@ -153,15 +162,6 @@ class AppointmentCalendar extends Component {
                     fullscreen={this.state.fullscreen}
                     onPanelChange={this.onPanelChange}
                 />
-                <Drawer
-                    title="Details"
-                    placement="bottom"
-                    closable={false}
-                    onClose={this.onClose}
-                    visible={this.state.showDrawer}
-                >
-                    {this.state.details.start}
-                </Drawer>
             </div >
         )
     }

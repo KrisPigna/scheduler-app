@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import AppointmentForm from './appointment-form/AppointmentForm';
 import AppointmentCalendar from './calendar/AppointmentCalendar';
+import UpcomingAppointments from './upcoming-appointments/UpcomingAppointments'
 import './App.css';
 import { Provider } from 'react-redux';
 import store from '../store'
@@ -20,9 +21,9 @@ class App extends Component {
                         onBreakpoint={(broken) => { console.log(broken); }}
                         onCollapse={(collapsed, type) => { console.log(collapsed, type); }}
                     >
-                        <div className="logo" />
+                        
                         <AppointmentForm />
-
+                        <UpcomingAppointments />
                     </Sider>
                     <Layout>
                         <Content className="content">

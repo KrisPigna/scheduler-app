@@ -9,8 +9,12 @@ public class Appointment {
 	@Id
 	public ObjectId _id;
 	
-	public LocalDateTime start;
-	public LocalDateTime end;
+	public String title;
+	public LocalDate startDate;
+	public LocalTime startTime;
+	public LocalDate endDate;
+	public LocalTime endTime;
+	public String notes;
 	
 	public List<String> attendees;
 	
@@ -26,20 +30,52 @@ public class Appointment {
 		this._id = _id;
 	}
 
-	public LocalDateTime getStart() {
-		return start;
+	public String getTitle() {
+		return title;
 	}
 
-	public void setStart(LocalDateTime start) {
-		this.start = start;
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
-	public LocalDateTime getEnd() {
-		return end;
+	public LocalDate getStartDate() {
+		return startDate;
 	}
 
-	public void setEnd(LocalDateTime end) {
-		this.end = end;
+	public void setStartDate(LocalDate startDate) {
+		this.startDate = startDate;
+	}
+
+	public LocalTime getStartTime() {
+		return startTime;
+	}
+
+	public void setStartTime(LocalTime startTime) {
+		this.startTime = startTime;
+	}
+
+	public LocalDate getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(LocalDate endDate) {
+		this.endDate = endDate;
+	}
+
+	public LocalTime getEndTime() {
+		return endTime;
+	}
+
+	public void setEndTime(LocalTime endTime) {
+		this.endTime = endTime;
+	}
+
+	public String getNotes() {
+		return notes;
+	}
+
+	public void setNotes(String notes) {
+		this.notes = notes;
 	}
 
 	public List<String> getAttendees() {
