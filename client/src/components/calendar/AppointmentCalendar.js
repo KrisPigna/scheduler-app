@@ -27,7 +27,7 @@ class AppointmentCalendar extends Component {
         this.state = {
             fullscreen: true,
             value: moment(today),
-            selectedValue: moment(today)
+            details: {}
         }
     }
 
@@ -35,6 +35,15 @@ class AppointmentCalendar extends Component {
         this.toggleFullscreen();
         window.addEventListener('resize', this.toggleFullscreen);
         this.props.fetchAppointments();
+        console.log(this.props.appointments);
+    }
+
+    componentDidUpdate(prevProps) {
+        console.log(this.props.appointments);
+        console.log(prevProps.appointments);
+        if (this.props.response !== prevProps.response) {
+            this.props.fetchAppointments();
+        }
     }
 
     componentWillUnmount() {
@@ -55,8 +64,9 @@ class AppointmentCalendar extends Component {
         this.setState({ value: value })
     }
 
-    onOpen() {
-        this.setState({ showDrawer: true });
+    onOpen(e) {
+        console.log(e.target);
+        this.setState({ showDrawer: true, details: e.target.value });
     }
 
     onClose() {
@@ -84,16 +94,23 @@ class AppointmentCalendar extends Component {
     }
 
     dateCellRender(value) {
-        const dates = ["2018-10-09", "2018-10-23", "2018-10-31"];
         let day = null;
-        if(value != undefined) {
+        let match = false;
+        let details = null;
+        if (value != undefined && this.props.appointments[0] != undefined) {
             day = value.format("YYYY-MM-DD");
+            this.props.appointments.forEach(appointment => {
+                if (appointment.start.substring(0,10) === day) {
+                    details = appointment;
+                    match = true;
+                }
+            });
         }
         if (this.state.fullscreen == true) {
-            if (dates.indexOf(day) > -1 ) {
+            if (match === true) {
                 return (
                     <div className="date">
-                        <Popover placement="top" title="Details" content="Stuff" trigger="click">
+                        <Popover placement="top" title={day} content={details.start} trigger="click">
                             <ul className="appointments">
                                 <li>{day}</li>
                             </ul>
@@ -101,13 +118,13 @@ class AppointmentCalendar extends Component {
                     </div>
                 );
             }
-            
+
         }
         else {
-            if (dates.indexOf(day) > -1 ) {
+            if (match === true) {
                 return (
-                    <div>
-                        <Badge count={1} onClick={this.onOpen}/>
+                    <div value={details} onClick={this.onOpen}>
+                        <Badge count={1} />
                     </div>
                 );
             }
@@ -143,7 +160,7 @@ class AppointmentCalendar extends Component {
                     onClose={this.onClose}
                     visible={this.state.showDrawer}
                 >
-
+                    {this.state.details.start}
                 </Drawer>
             </div >
         )
@@ -151,7 +168,8 @@ class AppointmentCalendar extends Component {
 }
 
 const mapStateToProps = state => ({
-    appointments: state.appointments.appointments
+    appointments: state.appointments.appointments,
+    response: state.appointments.response
 });
 
 export default connect(mapStateToProps, { fetchAppointments })(AppointmentCalendar);

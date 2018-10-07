@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
-import { Drawer, DatePicker, TimePicker, Button, Form, Input } from 'antd';
+import { createAppointment } from '../../actions/appointmentActions';
+import { Drawer, DatePicker, TimePicker, Button, Form, Input, Modal } from 'antd';
 
 import './AppointmentForm.css'
 
@@ -10,29 +11,58 @@ class AppointmentForm extends Component {
     constructor(props) {
         super(props);
 
+        this.setStartDate = this.setStartDate.bind(this);
         this.setStartTime = this.setStartTime.bind(this);
+        this.setEndDate = this.setEndDate.bind(this);
         this.setEndTime = this.setEndTime.bind(this);
         this.onChange = this.onChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.onClose = this.onClose.bind(this);
         this.onOpen = this.onOpen.bind(this);
 
+        let day = new Date();
+        let dd = day.getDate();
+        let mm = day.getMonth() + 1;
+        let yyyy = day.getFullYear();
+        let today = yyyy + '-' + mm + '-0' + dd;
+
         this.state = {
-            startTime: null,
-            endTime: null,
+            startDate: today,
+            startTime: "12:00am",
+            endDate: today,
+            endTime: "12:00am",
             attendee: "",
             showDrawer: false,
 
         }
     }
 
+    componentDidUpdate() {
+        console.log(this.props.response);
+        if (this.props.response._id) {
+            Modal.success({
+                content: "Appointment created"
+              });
+        }
+    }
+
+    setStartDate(date) {
+        this.setState({ startDate: date.format('YYYY-MM-DD') });
+        console.log(this.state.startDate);
+    }
+
     setStartTime(time) {
-        this.setState({ startTime: time });
+        this.setState({ startTime: time.format("HH:mm") });
         console.log(this.state.startTime);
     }
 
+    setEndDate(date) {
+        this.setState({ endDate: date.format('YYYY-MM-DD') });
+        console.log(this.state.endDate);
+    }
+
     setEndTime(time) {
-        this.setState({ endTime: time });
+        this.setState({ endTime: time.format("HH:mm") });
         console.log(this.state.endTime);
     }
 
@@ -44,11 +74,12 @@ class AppointmentForm extends Component {
     handleSubmit(e) {
         e.preventDefault();
         let appointment = {
-            start: this.state.startTime.format('YYYY-MM-DD') + 'T' + this.state.startTime.format('HH:MM'),
-            end: this.state.endTime.format('YYYY-MM-DD') + 'T' + this.state.endTime.format('HH:MM'),
+            start: this.state.startDate + 'T' + this.state.startTime,
+            end: this.state.endDate + 'T' + this.state.endTime,
             attendees: [this.state.attendee]
         }
-        console.log(appointment);
+        console.log(JSON.stringify(appointment));
+        this.props.createAppointment(appointment);
         this.onClose();
     }
 
@@ -61,8 +92,6 @@ class AppointmentForm extends Component {
     }
 
     render() {
-        const format = 'HH:mm';
-
         return (
             <div>
                 <Button onClick={this.onOpen}>New Appointment</Button>
@@ -77,24 +106,25 @@ class AppointmentForm extends Component {
                         <FormItem label="Start">
                             <DatePicker
                                 format="YYYY-MM-DD"
-                                onChange={this.setStartTime}
+                                onChange={this.setStartDate}
                             />
                             <TimePicker
                                 use12Hours
                                 minuteStep={5}
                                 format="h:mm a"
+                                onChange={this.setStartTime}
                             />
                         </FormItem>
                         <FormItem label="End">
                             <DatePicker
-                                showTime
-                                format="YYYY-MM-DD HH:mm"
-                                onChange={this.setEndTime}
+                                format="YYYY-MM-DD"
+                                onChange={this.setEndDate}
                             />
                             <TimePicker
                                 use12Hours
                                 minuteStep={5}
                                 format="h:mm a"
+                                onChange={this.setEndTime}
                             />
                         </FormItem>
                         <FormItem>
@@ -121,7 +151,7 @@ class AppointmentForm extends Component {
 }
 
 const mapStateToProps = state => ({
-    appointments: state.appointments.appointments
+    response: state.appointments.response
 });
 
-export default connect(mapStateToProps, {  })(AppointmentForm);
+export default connect(mapStateToProps, { createAppointment })(AppointmentForm);
