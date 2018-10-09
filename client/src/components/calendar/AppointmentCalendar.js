@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { fetchAppointments } from '../../actions/appointmentActions';
 import { Calendar, Drawer, Button, Icon, Popover, Badge } from 'antd';
 import moment from 'moment';
@@ -107,10 +108,11 @@ class AppointmentCalendar extends Component {
         }
         if (this.state.fullscreen == true) {
             if (match === true) {
-                const content = <div>{details.title}</div>;
+                const title = <Link to={`/day/${day}`}>{day}</Link>;
+                const content = <div>{details.title}</div>
                 return (
                     <div className="date">
-                        <Popover placement="top" title={day} content={content} trigger="click">
+                        <Popover placement="top" title={title} content={content} trigger="click">
                             <ul className="appointments">
                                 <li>{day}</li>
                             </ul>
@@ -122,11 +124,12 @@ class AppointmentCalendar extends Component {
         }
         else {
             if (match === true) {
+                const title = <Link to={`/day/${day}`}>{day}</Link>;
                 return (
                     <div>
                         <Badge count={1} onClick={this.onOpen}/>
                         <Drawer
-                            title={day}
+                            title={title}
                             placement="bottom"
                             closable={false}
                             onClose={this.onClose}
