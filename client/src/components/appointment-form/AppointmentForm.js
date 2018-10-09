@@ -33,18 +33,19 @@ class AppointmentForm extends Component {
             endDate: today,
             endTime: "12:00am",
             notes: "",
-            attendee: "",
+            attendees: "",
             showDrawer: false,
-
         }
     }
 
-    componentDidUpdate() {
+    componentDidUpdate(prevProps) {
         console.log(this.props.response);
         if (this.props.response._id) {
-            Modal.success({
-                content: "Appointment created"
-              });
+            if (this.props.response._id != prevProps.response._id) {
+                Modal.success({
+                    content: "Appointment created"
+                });
+            }
         }
     }
 
@@ -69,12 +70,12 @@ class AppointmentForm extends Component {
     }
 
     onChange(e) {
-        e.preventDefault();
-        this.setState({ [e.target.name]: e.target.value });
+        this.setState({[e.target.name]: e.target.value});
     }
 
     handleSubmit(e) {
         e.preventDefault();
+        console.log(this.state.attendees);
         let appointment = {
             title: this.state.title,
             startDate: this.state.startDate,
@@ -82,9 +83,8 @@ class AppointmentForm extends Component {
             endDate: this.state.endDate,
             endTime: this.state.endTime,
             notes: this.state.notes,
-            attendees: [this.state.attendee]
+            attendees: this.state.attendees.split(',')
         }
-
         console.log(JSON.stringify(appointment));
         this.props.createAppointment(appointment);
         this.onClose();
@@ -110,7 +110,7 @@ class AppointmentForm extends Component {
                     visible={this.state.showDrawer}
                 >
                     <Form onSubmit={this.handleSubmit}>
-                        <FormItem label="Title">
+                        <FormItem>
                             <Input
                                 placeholder="Title"
                                 name="title"
@@ -118,24 +118,28 @@ class AppointmentForm extends Component {
                                 onChange={this.onChange}
                             />
                         </FormItem>
-                        <FormItem label="Start">
+                        <FormItem>
                             <DatePicker
+                                placeholder="Start date"
                                 format="YYYY-MM-DD"
                                 onChange={this.setStartDate}
                             />
                             <TimePicker
+                                placeholder="Start time"
                                 use12Hours
                                 minuteStep={5}
                                 format="h:mm a"
                                 onChange={this.setStartTime}
                             />
                         </FormItem>
-                        <FormItem label="End">
+                        <FormItem>
                             <DatePicker
+                                placeholder="End date"
                                 format="YYYY-MM-DD"
                                 onChange={this.setEndDate}
                             />
                             <TimePicker
+                                placeholder="End time"
                                 use12Hours
                                 minuteStep={5}
                                 format="h:mm a"
@@ -143,15 +147,16 @@ class AppointmentForm extends Component {
                             />
                         </FormItem>
                         <FormItem>
-                            <Input
-                                placeholder="Attendee"
-                                name="attendee"
-                                value={this.state.attendee}
+                            <Input.TextArea
+                                placeholder="Attendees (separate with comma)"
+                                name="attendees"
+                                value={this.state.attendees}
                                 onChange={this.onChange}
                             />
                         </FormItem>
-                        <FormItem label="Notes">
+                        <FormItem>
                             <Input.TextArea
+                                placeholder="Notes"
                                 name="notes"
                                 value={this.state.notes}
                                 onChange={this.onChange}

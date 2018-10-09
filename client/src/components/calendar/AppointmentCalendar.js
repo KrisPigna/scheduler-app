@@ -109,12 +109,12 @@ class AppointmentCalendar extends Component {
         if (this.state.fullscreen == true) {
             if (match === true) {
                 const title = <Link to={`/day/${day}`}>{day}</Link>;
-                const content = <div>{details.title}</div>
+                const content = <div>{details.title}: {details.startTime}-{details.endTime}</div>
                 return (
                     <div className="date">
                         <Popover placement="top" title={title} content={content} trigger="click">
                             <ul className="appointments">
-                                <li>{day}</li>
+                                <li>{details.title}</li>
                             </ul>
                         </Popover>
                     </div>
