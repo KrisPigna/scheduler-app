@@ -32,7 +32,7 @@ class App extends Component {
                             <Content className="content">
                                 <div className="calendar">
                                     <Route exact path="/" component={AppointmentCalendar} />
-                                    <Route path="/day" component={Day}/>
+                                    <Route path="/day/:day" component={Day}/>
                                 </div>
                             </Content>
                         </Layout>
