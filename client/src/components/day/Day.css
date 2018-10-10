@@ -1,4 +1,13 @@
 .back {
     float: left;
-    margin: 1em;
+}
+
+.minutes {
+    border-bottom: 1px solid grey;
+    height: 20px;
+}
+
+.table-container {
+    max-width: 400px;
+    margin: auto;
 }

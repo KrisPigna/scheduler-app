@@ -30,12 +30,9 @@ class UpcomingAppointments extends Component {
         }
         let timespan = new Date();
         timespan.setDate(timespan.getDate() + 3);
-        console.log(timespan.getTime());
         this.props.appointments.forEach(appointment => {
             let apptDate = new Date(appointment.startDate);
-            console.log(apptDate.getTime());
             if (apptDate.getTime() < timespan.getTime()) {
-                console.log("less");
                 this.state.upcomingList.push(appointment);
             }
         });
@@ -59,7 +56,6 @@ class UpcomingAppointments extends Component {
     render() {
         this.generateUpcomingList();
         const content = this.displayUpcomingAppointments();
-        console.log(this.state.upcomingList);
         return (
             <div className="upcoming-card">
                 <Card

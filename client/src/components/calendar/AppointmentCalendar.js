@@ -27,7 +27,8 @@ class AppointmentCalendar extends Component {
 
         this.state = {
             fullscreen: true,
-            value: moment(today)
+            value: moment(today),
+            showModal: false
         }
     }
 
@@ -35,12 +36,9 @@ class AppointmentCalendar extends Component {
         this.toggleFullscreen();
         window.addEventListener('resize', this.toggleFullscreen);
         this.props.fetchAppointments();
-        console.log(this.props.appointments);
     }
 
     componentDidUpdate(prevProps) {
-        console.log(this.props.appointments);
-        console.log(prevProps.appointments);
         if (this.props.response !== prevProps.response) {
             this.props.fetchAppointments();
         }
@@ -60,17 +58,15 @@ class AppointmentCalendar extends Component {
     }
 
     onPanelChange(value, mode) {
-        console.log(value, mode);
         this.setState({ value: value })
     }
 
     onOpen(e) {
-        console.log(e.target);
-        this.setState({ showDrawer: true, details: e.target.value });
+        this.setState({ showModal: true});
     }
 
     onClose() {
-        this.setState({ showDrawer: false });
+        this.setState({ showModal: false });
     }
 
     nextMonth() {
@@ -78,7 +74,6 @@ class AppointmentCalendar extends Component {
         if (newMonth > 12) {
             newMonth = 1;
         }
-        console.log(newMonth);
         let newValue = this.state.value.format('YYYY') + '-' + newMonth + '-01';
         this.setState({ value: moment(newValue) })
     }
@@ -88,7 +83,6 @@ class AppointmentCalendar extends Component {
         if (newMonth < 1) {
             newMonth = 12;
         }
-        console.log(newMonth);
         let newValue = this.state.value.format('YYYY') + '-' + newMonth + '-01';
         this.setState({ value: moment(newValue) })
     }
@@ -96,25 +90,30 @@ class AppointmentCalendar extends Component {
     dateCellRender(value) {
         let day = null;
         let match = false;
-        let details = null;
+        let appointments = [];
+        let details = [];
+        let content = [];
         if (value != undefined && this.props.appointments[0] != undefined) {
             day = value.format("YYYY-MM-DD");
             this.props.appointments.forEach(appointment => {
                 if (appointment.startDate === day) {
-                    details = appointment;
+                    appointments.push(appointment);
+                    details.push(<li key={appointment._id}>{appointment.title}</li>);
                     match = true;
                 }
             });
+            appointments.forEach(appointment => {
+                content.push(<div key={appointment._id}>{appointment.title}: {appointment.startTime}-{appointment.endTime}</div>)
+             })
         }
         if (this.state.fullscreen == true) {
             if (match === true) {
                 const title = <Link to={`/day/${day}`}>{day}</Link>;
-                const content = <div>{details.title}: {details.startTime}-{details.endTime}</div>
                 return (
                     <div className="date">
                         <Popover placement="top" title={title} content={content} trigger="click">
                             <ul className="appointments">
-                                <li>{details.title}</li>
+                                {details}
                             </ul>
                         </Popover>
                     </div>
@@ -133,9 +132,9 @@ class AppointmentCalendar extends Component {
                             placement="bottom"
                             closable={false}
                             onClose={this.onClose}
-                            visible={this.state.showDrawer}
+                            visible={this.state.showModal}
                         >
-                            {details.title}
+                            {content}
                         </Drawer>
                     </div>
                 );
@@ -147,8 +146,6 @@ class AppointmentCalendar extends Component {
 
     render() {
         const ButtonGroup = Button.Group;
-
-        console.log(this.props.appointments);
 
         return (
             <div className="calendar-container">

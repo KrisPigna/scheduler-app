@@ -51,7 +51,6 @@ class AppointmentForm extends Component {
 
     setStartDate(date) {
         this.setState({ startDate: date.format('YYYY-MM-DD') });
-        console.log(this.state.startDate);
     }
 
     setStartTime(time) {
