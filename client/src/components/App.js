@@ -4,6 +4,7 @@ import AppointmentForm from './appointment-form/AppointmentForm';
 import AppointmentCalendar from './calendar/AppointmentCalendar';
 import UpcomingAppointments from './upcoming-appointments/UpcomingAppointments'
 import Day from './day/Day';
+import Appointment from './appointment/Appointment';
 import './App.css';
 import { Provider } from 'react-redux';
 import store from '../store'
@@ -32,7 +33,8 @@ class App extends Component {
                             <Content className="content">
                                 <div className="calendar">
                                     <Route exact path="/" component={AppointmentCalendar} />
-                                    <Route path="/day/:day" component={Day}/>
+                                    <Route path="/day/:day" component={Day} />
+                                    <Route path="/appointment/:id" component={Appointment} />
                                 </div>
                             </Content>
                         </Layout>

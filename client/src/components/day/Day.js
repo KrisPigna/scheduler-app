@@ -87,7 +87,7 @@ class Day extends Component {
                     if (minutes == '55') {
                         index = 11;
                     }
-                    hour.appointment[index] = <div key={index} className="minutes">{appointment.title}</div>
+                    hour.appointment[index] = <div key={index} className="minutes"><Link to={`/appointment/${appointment._id}`}>{appointment.title}</Link></div>
                 }
             })
             dataSource.push(hour);
