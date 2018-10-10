@@ -2,12 +2,19 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Table, Icon } from 'antd';
+import { fetchAppointments } from '../../actions/appointmentActions';
 import "./Day.css";
 
 class Day extends Component {
     constructor(props) {
         super(props);
         this.getMinutes = this.getMinutes.bind(this);
+    }
+
+    componentDidUpdate(prevProps) {
+        if (this.props.response !== prevProps.response) {
+            this.props.fetchAppointments();
+        }
     }
 
     getMinutes() {
@@ -111,4 +118,4 @@ const mapStateToProps = state => ({
     response: state.appointments.response
 });
 
-export default connect(mapStateToProps, {})(Day);
+export default connect(mapStateToProps, {fetchAppointments})(Day);
