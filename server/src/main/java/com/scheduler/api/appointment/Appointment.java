@@ -3,6 +3,7 @@ package com.scheduler.api.appointment;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import java.time.*;
+import static java.time.temporal.ChronoUnit.MINUTES;
 import java.util.List;
 
 public class Appointment {
@@ -15,6 +16,7 @@ public class Appointment {
 	public LocalDate endDate;
 	public LocalTime endTime;
 	public String notes;
+	public int timespan;
 	
 	public List<String> attendees;
 	
@@ -84,5 +86,13 @@ public class Appointment {
 
 	public void setAttendees(List<String> attendees) {
 		this.attendees = attendees;
+	}
+	
+	public void setTimespan() {
+		this.timespan = (int) this.startTime.until(this.endTime, MINUTES);
+	}
+	
+	public int getTimespan() {
+		return this.timespan;
 	}
 }

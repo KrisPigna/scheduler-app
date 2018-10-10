@@ -7,7 +7,16 @@
     height: 20px;
 }
 
+.appointment {
+    display: inline-block;
+    position: block;
+    width: 100px;
+    border: 1px solid navy;
+    background-color: lightskyblue;
+}
+
 .table-container {
     max-width: 400px;
     margin: auto;
+    overflow: scroll;
 }

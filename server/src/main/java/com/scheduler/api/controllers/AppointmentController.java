@@ -29,6 +29,7 @@ public class AppointmentController {
 	@RequestMapping(value = "/new_appointment", method = RequestMethod.POST)
 	public Appointment createAppointment(@Valid @RequestBody Appointment appointment) {
 		appointment.set_id(ObjectId.get());
+		appointment.setTimespan();
 		System.out.println(appointment.get_id());
 		repository.save(appointment);
 		return appointment;

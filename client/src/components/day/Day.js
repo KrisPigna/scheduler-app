@@ -21,7 +21,7 @@ class Day extends Component {
         let dataSourceSub = new Array;
         let i = 0;
         for (i = 0; i < 60; i += 5) {
-            dataSourceSub.push(<div key={i} className="minutes"></div>);
+        dataSourceSub.push([<div key={i} className="minutes"></div>]);
         }
         return dataSourceSub;
     }
@@ -94,7 +94,8 @@ class Day extends Component {
                     if (minutes == '55') {
                         index = 11;
                     }
-                    hour.appointment[index] = <div key={index} className="minutes"><Link to={`/appointment/${appointment._id}`}>{appointment.title}</Link></div>
+                    let padding = hour.appointment[index].length - 1;
+                    hour.appointment[index].push(<div key={appointment._id} className="minutes"><Link to={`/appointment/${appointment._id}`}><span className="appointment" style={{height: appointment.timespan * 4, marginLeft: padding * 100}}>{appointment.title}</span></Link></div>);
                 }
             })
             dataSource.push(hour);

@@ -21,6 +21,7 @@ class Appointment extends Component {
                     <p>{selectedApt.startTime} - {selectedApt.endTime}</p>
                     <p>{selectedApt.attendees}</p>
                     <p>{selectedApt.notes}</p>
+                    <p>{selectedApt.timespan}</p>
                 </Card>
                 
             </div>
