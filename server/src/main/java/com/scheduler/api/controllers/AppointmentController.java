@@ -30,6 +30,8 @@ public class AppointmentController {
 	public Appointment createAppointment(@Valid @RequestBody Appointment appointment) {
 		appointment.set_id(ObjectId.get());
 		appointment.setTimespan();
+		appointment.setStartTimeInMinutes();
+		appointment.setColumn();
 		System.out.println(appointment.get_id());
 		repository.save(appointment);
 		return appointment;

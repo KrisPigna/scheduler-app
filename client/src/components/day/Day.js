@@ -8,7 +8,19 @@ import "./Day.css";
 class Day extends Component {
     constructor(props) {
         super(props);
+
         this.getMinutes = this.getMinutes.bind(this);
+        this.getHours = this.getHours.bind(this);
+        this.getAppointmentsList = this.getAppointmentsList.bind(this);
+        this.sortAppointments = this.sortAppointments.bind(this);
+
+        this.state = {
+            hours: new Array(24)
+        }
+    }
+
+    componentWillMount() {
+        this.getHours();
     }
 
     componentDidUpdate(prevProps) {
@@ -21,41 +33,73 @@ class Day extends Component {
         let dataSourceSub = new Array;
         let i = 0;
         for (i = 0; i < 60; i += 5) {
-        dataSourceSub.push([<div key={i} className="minutes"></div>]);
+            dataSourceSub.push(<div key={i} className="minutes"></div>);
         }
         return dataSourceSub;
     }
 
-    render() {
-        const columns = [{
-            title: 'Time',
-            dataIndex: 'time',
-            key: 'time',
-            width: 70
-        }, {
-            title: 'Appointment',
-            dataIndex: 'appointment',
-            key: 'appointment',
-        }]
+    getHours() {
+        for (let i = 1; i <= 24; i++) {
+            if (i < 10) {
+                this.state.hours[i-1] = '0' + (i) + ':00AM';
+            }
+            else if (i == 12) {
+                this.state.hours[i-1] = (i) + ':00PM';
+            }
+            else if (i == 10 || i == 11) {
+                this.state.hours[i-1] = (i) + ':00AM';
+            }
+            else if (i > 12 && i < 22) {
+                this.state.hours[i-1] = '0' + (i - 12) + ':00PM';
+            }
+            else if (i == 22 || i == 23) {
+                this.state.hours[i-1] = (i - 12) + ':00PM';
+            }
+            else if (i == 24) {
+                this.state.hours[i-1] = (i - 12) + ':00AM';
+            }
+        }
+    }
 
-        let dataSource = [];
+    sortAppointments(appointments) {
+        appointments.sort((a, b) => {
+            if (a.startTimeInMinutes < b.startTimeInMinutes) {
+                return -1;
+            }
+            if (a.startTimeInMinutes > b.startTimeInMinutes) {
+                return 1;
+            }
+            return 0;
+        })
+        return appointments;
+    }
+
+    getAppointmentsList() {
+        let list = [];
+        let appointments = [];
+        let j = 0;
+        this.props.appointments.forEach(appointment => {
+            if (appointment.startDate == this.props.match.params.day) {
+                appointments.push(appointment);
+            }
+        });
+        appointments = this.sortAppointments(appointments);
         for (let i = 0; i < 24; i++) {
             let hour = {
                 key: i + 1,
+                militaryHour: "",
                 time: "",
                 appointment: this.getMinutes()
             }
+            hour.time = this.state.hours[i];
             if (i < 9) {
-                hour.time = '0' + (i + 1) + ':00';
+                hour.militaryTime = '0' + (i + 1) + ':00';
             }
             else {
-                hour.time = (i + 1) + ':00';
+                hour.militaryTime = (i + 1) + ':00';
             }
-            this.props.appointments.forEach(appointment => {
-                console.log("appointment: " + appointment.startTime.substring(0, 2));
-                console.log("Hour: " + hour.time.substring(0,2));
-                if (appointment.startDate == this.props.match.params.day
-                    && appointment.startTime.substring(0, 2) == hour.time.substring(0, 2)) {
+            appointments.forEach(appointment => {
+                if (appointment.startTime.substring(0, 2) == hour.militaryTime.substring(0, 2)) {
                     let minutes = appointment.startTime.substring(3, 5);
                     let index = null;
                     if (minutes == '00') {
@@ -94,12 +138,43 @@ class Day extends Component {
                     if (minutes == '55') {
                         index = 11;
                     }
-                    let padding = hour.appointment[index].length - 1;
-                    hour.appointment[index].push(<div key={appointment._id} className="minutes"><Link to={`/appointment/${appointment._id}`}><span className="appointment" style={{height: appointment.timespan * 4, marginLeft: padding * 100}}>{appointment.title}</span></Link></div>);
+                    for (let k = j - 1; k >= 0; k--) {
+                        if (appointment.startTimeInMinutes < (appointments[k].startTimeInMinutes + appointments[k].timespan)
+                            && appointment.column == appointments[k].column) {
+                            appointment.column++;
+                        }
+                    }
+                    hour.appointment[index] = <div key={index} className="minutes">
+                        <Link to={`/appointment/${appointment._id}`}>
+                            <span 
+                                className="appointment" 
+                                style={{ height: appointment.timespan * 2, marginLeft: appointment.column * 100 }}
+                            >
+                                {appointment.title}<br/>
+                                {appointment.startTime}
+                            </span>
+                        </Link>
+                    </div>
+                    j++;
                 }
             })
-            dataSource.push(hour);
+            list.push(hour);
         }
+        return list;
+    }
+
+    render() {
+        const columns = [{
+            title: 'Time',
+            dataIndex: 'time',
+            key: 'time'
+        }, {
+            title: 'Appointment',
+            dataIndex: 'appointment',
+            key: 'appointment',
+        }]
+
+        let dataSource = this.getAppointmentsList();
 
         return (
             <div>
@@ -119,4 +194,4 @@ const mapStateToProps = state => ({
     response: state.appointments.response
 });
 
-export default connect(mapStateToProps, {fetchAppointments})(Day);
+export default connect(mapStateToProps, { fetchAppointments })(Day);

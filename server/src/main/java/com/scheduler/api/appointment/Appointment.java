@@ -8,15 +8,17 @@ import java.util.List;
 
 public class Appointment {
 	@Id
-	public ObjectId _id;
+	private ObjectId _id;
 	
-	public String title;
-	public LocalDate startDate;
-	public LocalTime startTime;
-	public LocalDate endDate;
-	public LocalTime endTime;
-	public String notes;
-	public int timespan;
+	private String title;
+	private LocalDate startDate;
+	private LocalTime startTime;
+	private LocalDate endDate;
+	private LocalTime endTime;
+	private String notes;
+	private int timespan;
+	private int startTimeInMinutes;
+	private int column;
 	
 	public List<String> attendees;
 	
@@ -94,5 +96,22 @@ public class Appointment {
 	
 	public int getTimespan() {
 		return this.timespan;
+	}
+	
+	public void setStartTimeInMinutes() {
+		LocalTime midnight = LocalTime.of(6, 0);
+		this.startTimeInMinutes = (int) midnight.until(this.startTime, MINUTES);
+	}
+	
+	public int getStartTimeInMinutes() {
+		return this.startTimeInMinutes;
+	}
+	
+	public void setColumn() {
+		this.column = 0;
+	}
+	
+	public int getColumn() {
+		return this.column;
 	}
 }
