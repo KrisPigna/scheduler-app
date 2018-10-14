@@ -84,9 +84,11 @@ class Day extends Component {
             }
         });
         appointments = this.sortAppointments(appointments);
+        console.log(appointments);
         for (let i = 0; i < 24; i++) {
             let hour = {
                 key: i + 1,
+                width: 100,
                 militaryHour: "",
                 time: "",
                 appointment: this.getMinutes()
@@ -138,9 +140,11 @@ class Day extends Component {
                     if (minutes == '55') {
                         index = 11;
                     }
-                    for (let k = j - 1; k >= 0; k--) {
+                    for (let k = 0; k <= j- 1; k++) {
+                        console.log(appointment.startTime + " " + appointment.column);
+                        console.log(appointments[k].startTime + " " + appointments[k].column)
                         if (appointment.startTimeInMinutes < (appointments[k].startTimeInMinutes + appointments[k].timespan)
-                            && appointment.column == appointments[k].column) {
+                            && appointment.column == appointments[k].column) {                   
                             appointment.column++;
                         }
                     }

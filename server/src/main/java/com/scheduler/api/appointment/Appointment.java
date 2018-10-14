@@ -99,7 +99,7 @@ public class Appointment {
 	}
 	
 	public void setStartTimeInMinutes() {
-		LocalTime midnight = LocalTime.of(6, 0);
+		LocalTime midnight = LocalTime.of(0, 0);
 		this.startTimeInMinutes = (int) midnight.until(this.startTime, MINUTES);
 	}
 	
