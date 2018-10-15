@@ -49,8 +49,8 @@ public class AppointmentController {
 	}
 	
 	@RequestMapping(value = "/delete_appointment/{id}", method = RequestMethod.DELETE)
-	public String delete(@PathVariable("id") ObjectId id) {
+	public List<Appointment> delete(@PathVariable("id") ObjectId id) {
 	   repository.delete(repository.findBy_id(id));
-	   return "{\"message\": \"Deleted\"}";
+	   return repository.findAll();
 	}
 }

@@ -103,7 +103,7 @@ class AppointmentCalendar extends Component {
                 }
             });
             appointments.forEach(appointment => {
-                content.push(<div key={appointment._id}>{appointment.title}: {appointment.startTime}-{appointment.endTime}</div>)
+                content.push(<div key={appointment._id}><Link to={`/appointment/${appointment._id}`}>{appointment.title}: {appointment.startTime}-{appointment.endTime}</Link></div>)
              })
         }
         if (this.state.fullscreen == true) {

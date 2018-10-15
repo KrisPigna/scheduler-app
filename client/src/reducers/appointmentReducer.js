@@ -1,4 +1,4 @@
-import { FETCH_APPOINTMENTS, NEW_APPOINTMENT } from '../actions/types';
+import { FETCH_APPOINTMENTS, NEW_APPOINTMENT, DELETE_APPOINTMENT } from '../actions/types';
 
 const initialState = {
     appointments: [],
@@ -16,6 +16,11 @@ export default function(state = initialState, action) {
             return {
                 ...state,
                 response: action.payload
+            }
+        case DELETE_APPOINTMENT:
+            return {
+                ...state,
+                appointments: action.payload
             }
         default:
             return state;
