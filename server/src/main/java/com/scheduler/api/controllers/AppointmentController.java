@@ -1,6 +1,6 @@
 package com.scheduler.api.controllers;
 
-import com.scheduler.api.appointment.Appointment;
+import com.scheduler.api.models.Appointment;
 import com.scheduler.api.repositories.AppointmentsRepository;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,7 +1,12 @@
 import { FETCH_APPOINTMENTS, NEW_APPOINTMENT, DELETE_APPOINTMENT } from './types';
 
 export const fetchAppointments = () => dispatch => {
-    fetch('http://localhost:8080/api/get_appointments')
+    fetch('http://localhost:8080/api/get_appointments', {
+        headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem("token")
+        },
+        method: 'get'
+    })
         .then(res => res.json())
         .then(appointments => dispatch({
             type: FETCH_APPOINTMENTS,
