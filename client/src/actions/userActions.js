@@ -27,8 +27,11 @@ export const loginUser = (user) => dispatch => {
         body: JSON.stringify(user)
     })
         .then(res => res.json())
-        .then(res => dispatch({
+        .then(res => {
+            console.log(res);
+            dispatch({
             type: LOGIN_USER,
-            payload: res.token
-        }))
+            payload: res
+        })
+    })
 }

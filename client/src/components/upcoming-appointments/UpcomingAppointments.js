@@ -1,7 +1,8 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { fetchAppointments } from '../../actions/appointmentActions';
-import { Card, Button, Divider } from 'antd';
+import { Card, Divider } from 'antd';
 import './UpcomingAppointments.css'
 
 class UpcomingAppointments extends Component {
@@ -60,9 +61,9 @@ class UpcomingAppointments extends Component {
             <div className="upcoming-card">
                 <Card
                     title="Upcoming"
+                    extra={<Link to="/dashboard/all_appointments">View All</Link>}
                 >
                     {content}
-                    <Button>View All</Button>
                 </Card>
             </div>
         )

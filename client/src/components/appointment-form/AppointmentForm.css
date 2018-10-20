@@ -1,3 +1,8 @@
 .appointment-form {
     margin-top: 50%;
 }
+
+.new-appointment {
+    width: 98%;
+    margin: 2px;
+}

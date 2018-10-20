@@ -1,7 +1,9 @@
 import { NEW_USER, LOGIN_USER } from '../actions/types';
 
 const initialState = {
-    toekn: null
+    token: null,
+    username: null,
+    created: false
 }
 
 export default function (state = initialState, action) {
@@ -9,12 +11,13 @@ export default function (state = initialState, action) {
         case NEW_USER:
             return {
                 ...state,
-                validated: action.payload
+                created: action.payload
             }
         case LOGIN_USER:
             return {
                 ...state,
-                token: action.payload
+                token: action.payload.token,
+                username: action.payload.username
             }
         default:
             return state;

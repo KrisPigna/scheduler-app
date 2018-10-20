@@ -18,7 +18,8 @@ export const createAppointment = (appointment) => dispatch => {
     fetch('http://localhost:8080/api/new_appointment', {
         headers: {
             'Accept': 'application/json',
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem("token")
         },
         method: 'post',
         body: JSON.stringify(appointment)
@@ -35,7 +36,8 @@ export const deleteAppointment = (id) => dispatch => {
     fetch(url, {
         headers: {
             'Accept': 'application/json',
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem("token")
         },
         method: 'delete',
     })

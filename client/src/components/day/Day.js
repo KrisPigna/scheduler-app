@@ -149,7 +149,7 @@ class Day extends Component {
                         }
                     }
                     hour.appointment[index] = <div key={index} className="minutes">
-                        <Link to={`/appointment/${appointment._id}`}>
+                        <Link to={`/dashboard/appointment/${appointment._id}`}>
                             <span 
                                 className="appointment" 
                                 style={{ height: appointment.timespan * 2, marginLeft: appointment.column * 100 }}
@@ -186,7 +186,7 @@ class Day extends Component {
                     <Table columns={columns} dataSource={dataSource} pagination={false} scroll={{ y: 540 }} />
                 </div>
                 <div>
-                    <Link className="back" to="/"><Icon type="left" />Back to Calendar</Link>
+                    <Link className="back" to="/dashboard/calendar"><Icon type="left" />Back to Calendar</Link>
                 </div>
             </div >
         )

@@ -11,7 +11,7 @@ class App extends Component {
         return (
             <Router>
                 <Provider store={store}>
-                    <div>
+                    <div className="container">
                         <Route exact path="/" component={Landing} />
                         <Route path="/dashboard" component={Dashboard} />
                     </div>

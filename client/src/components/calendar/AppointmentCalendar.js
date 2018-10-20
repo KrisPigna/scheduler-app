@@ -103,12 +103,12 @@ class AppointmentCalendar extends Component {
                 }
             });
             appointments.forEach(appointment => {
-                content.push(<div key={appointment._id}><Link to={`/appointment/${appointment._id}`}>{appointment.title}: {appointment.startTime}-{appointment.endTime}</Link></div>)
+                content.push(<div key={appointment._id}><Link to={`/dashboard/appointment/${appointment._id}`}>{appointment.title}: {appointment.startTime}-{appointment.endTime}</Link></div>)
              })
         }
         if (this.state.fullscreen == true) {
             if (match === true) {
-                const title = <Link to={`/day/${day}`}>{day}</Link>;
+                const title = <Link to={`/dashboard/day/${day}`}>{day}</Link>;
                 return (
                     <div className="date">
                         <Popover placement="top" title={title} content={content} trigger="click">
@@ -123,10 +123,10 @@ class AppointmentCalendar extends Component {
         }
         else {
             if (match === true) {
-                const title = <Link to={`/day/${day}`}>{day}</Link>;
+                const title = <Link to={`/dashboard/day/${day}`}>{day}</Link>;
                 return (
                     <div>
-                        <Badge count={1} onClick={this.onOpen}/>
+                        <Badge count={appointments.length} onClick={this.onOpen}/>
                         <Drawer
                             title={title}
                             placement="bottom"
@@ -148,7 +148,7 @@ class AppointmentCalendar extends Component {
         const ButtonGroup = Button.Group;
 
         return (
-            <div className="calendar-container">
+            <div className="calendar">
                 <ButtonGroup>
                     <Button onClick={this.prevMonth}>
                         <Icon type="left" />

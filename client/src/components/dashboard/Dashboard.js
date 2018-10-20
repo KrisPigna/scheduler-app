@@ -6,12 +6,14 @@ import AppointmentCalendar from '../calendar/AppointmentCalendar';
 import UpcomingAppointments from '../upcoming-appointments/UpcomingAppointments'
 import Day from '../day/Day';
 import Appointment from '../appointment/Appointment';
+import User from './User'
 
 import { Layout } from 'antd';
 
 const { Content, Sider } = Layout;
 
 class Dashboard extends Component {
+
     render() {
         return (
             <Layout className="container">
@@ -21,16 +23,15 @@ class Dashboard extends Component {
                     onBreakpoint={(broken) => { console.log(broken); }}
                     onCollapse={(collapsed, type) => { console.log(collapsed, type); }}
                 >
+                    <User />
                     <AppointmentForm />
                     <UpcomingAppointments />
                 </Sider>
                 <Layout>
                     <Content className="content">
-                        <div className="calendar">
-                            <Route path="/dashboard/calendar" component={AppointmentCalendar} />
-                            <Route path="/dashboard/day/:day" component={Day} />
-                            <Route path="/dashboard/appointment/:id" component={Appointment} />
-                        </div>
+                        <Route path="/dashboard/calendar" component={AppointmentCalendar} />
+                        <Route path="/dashboard/day/:day" component={Day} />
+                        <Route path="/dashboard/appointment/:id" component={Appointment} />
                     </Content>
                 </Layout>
             </Layout>

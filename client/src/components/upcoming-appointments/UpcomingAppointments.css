@@ -1,4 +1,6 @@
 .upcoming-card {
     display: block;
-    margin: 1em;
+    margin: 2px;
+    height: 400px;
+    overflow: hidden;
 }

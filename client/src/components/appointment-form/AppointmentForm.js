@@ -100,7 +100,7 @@ class AppointmentForm extends Component {
     render() {
         return (
             <div className="appointment-form">
-                <Button onClick={this.onOpen}>New Appointment</Button>
+                <Button className="new-appointment" onClick={this.onOpen}>New Appointment</Button>
                 <Drawer
                     title="New Appointment"
                     placement="left"
