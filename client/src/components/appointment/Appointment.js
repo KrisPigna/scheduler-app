@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 import { deleteAppointment } from '../../actions/appointmentActions'
 import { Card, Modal } from 'antd';
 import './Appointment.css';
@@ -12,7 +13,8 @@ class Appointment extends Component {
         this.editAppointment = this.editAppointment.bind(this);
 
         this.state = {
-            selectedApt: {}
+            selectedApt: {},
+            redirect: false
         }
     }
 
@@ -29,6 +31,7 @@ class Appointment extends Component {
             Modal.success({
                 content: "Appointment deleted"
             });
+            this.setState({redirect: true})
         }
     }
 
@@ -47,6 +50,9 @@ class Appointment extends Component {
     }
 
     render() {
+        if (this.state.redirect === true) {
+            return (<Redirect to="/dashboard/calendar" />)
+        }
         return (
             <div className="appointment-card">
                 <Card

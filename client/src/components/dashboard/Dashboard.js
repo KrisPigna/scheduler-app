@@ -29,9 +29,9 @@ class Dashboard extends Component {
                 </Sider>
                 <Layout>
                     <Content className="content">
-                        <Route path="/dashboard/calendar" component={AppointmentCalendar} />
-                        <Route path="/dashboard/day/:day" component={Day} />
-                        <Route path="/dashboard/appointment/:id" component={Appointment} />
+                        <Route exact path="/dashboard/calendar" component={AppointmentCalendar} />
+                        <Route exact path="/dashboard/day/:day" component={Day} />
+                        <Route exact path="/dashboard/appointment/:id" component={Appointment} />
                     </Content>
                 </Layout>
             </Layout>

@@ -79,7 +79,6 @@ class Landing extends Component {
 
     validatePassword(rule, value, callback) {
         const form = this.props.form;
-        console.log(form.getFieldValue("confirm"));
         let regularExpression = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,16}$/;
 
         try {
@@ -93,6 +92,7 @@ class Landing extends Component {
                 callback("Passwords do not match");
             }
             else {
+                form.validateFields(['confirm'], { force: true });
                 callback();
             }
         }
@@ -110,6 +110,7 @@ class Landing extends Component {
                 callback("Passwords do not match");
             }
             else {
+                form.validateFields(['password'], { force: true });
                 callback();
             }
         }

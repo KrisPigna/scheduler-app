@@ -17,6 +17,7 @@ class AppointmentCalendar extends Component {
         this.nextMonth = this.nextMonth.bind(this);
         this.prevMonth = this.prevMonth.bind(this);
         this.dateCellRender = this.dateCellRender.bind(this);
+        this.buildDrawerList = this.buildDrawerList.bind(this);
 
         let day = new Date();
         let dd = day.getDate();
@@ -28,7 +29,7 @@ class AppointmentCalendar extends Component {
         this.state = {
             fullscreen: true,
             value: moment(today),
-            showModal: false
+            showDrawer: []
         }
     }
 
@@ -42,10 +43,28 @@ class AppointmentCalendar extends Component {
         if (this.props.response !== prevProps.response) {
             this.props.fetchAppointments();
         }
+        this.buildDrawerList();
     }
 
     componentWillUnmount() {
         window.removeEventListener('resize', this.toggleFullscreen);
+    }
+
+    buildDrawerList() {
+        try {
+            while (this.state.showDrawer.length > 0) {
+                this.state.showDrawer.pop();
+            }
+            this.props.appointments.forEach(appointment => {
+                let duplicate = this.state.showDrawer.findIndex(x => x.day === appointment.startDate);
+                if (duplicate === -1) {
+                    this.state.showDrawer.push({day: appointment.startDate, value: false})
+                }
+            })
+        }
+        catch(err) {
+            console.log(err);
+        }
     }
 
     toggleFullscreen() {
@@ -61,12 +80,16 @@ class AppointmentCalendar extends Component {
         this.setState({ value: value })
     }
 
-    onOpen(e) {
-        this.setState({ showModal: true});
+    onOpen(day) {
+        console.log("on open")
+        this.state.showDrawer.find(x => x.day === day).value = true;
     }
 
     onClose() {
-        this.setState({ showModal: false });
+        this.state.showDrawer.forEach(item => {
+            console.log(item);
+            item.value = false;
+        })
     }
 
     nextMonth() {
@@ -93,6 +116,7 @@ class AppointmentCalendar extends Component {
         let appointments = [];
         let details = [];
         let content = [];
+        let i = 0;
         if (value != undefined && this.props.appointments[0] != undefined) {
             day = value.format("YYYY-MM-DD");
             this.props.appointments.forEach(appointment => {
@@ -104,7 +128,7 @@ class AppointmentCalendar extends Component {
             });
             appointments.forEach(appointment => {
                 content.push(<div key={appointment._id}><Link to={`/dashboard/appointment/${appointment._id}`}>{appointment.title}: {appointment.startTime}-{appointment.endTime}</Link></div>)
-             })
+            })
         }
         if (this.state.fullscreen == true) {
             if (match === true) {
@@ -126,13 +150,13 @@ class AppointmentCalendar extends Component {
                 const title = <Link to={`/dashboard/day/${day}`}>{day}</Link>;
                 return (
                     <div>
-                        <Badge count={appointments.length} onClick={this.onOpen}/>
+                        <Badge count={appointments.length} onClick={() => this.onOpen(day)}/>
                         <Drawer
                             title={title}
                             placement="bottom"
-                            closable={false}
+                            closable={true}
                             onClose={this.onClose}
-                            visible={this.state.showModal}
+                            visible={this.state.showDrawer.find(x => x.day === day).value}
                         >
                             {content}
                         </Drawer>
@@ -146,6 +170,8 @@ class AppointmentCalendar extends Component {
 
     render() {
         const ButtonGroup = Button.Group;
+
+        this.buildDrawerList();
 
         return (
             <div className="calendar">

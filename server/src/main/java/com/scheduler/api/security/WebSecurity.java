@@ -1,5 +1,8 @@
 package com.scheduler.api.security;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -41,8 +44,11 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
+    	CorsConfiguration corsConfig = new CorsConfiguration().applyPermitDefaultValues();
       final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-      source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
+      source.registerCorsConfiguration("/**", corsConfig);
+      corsConfig.addAllowedMethod(HttpMethod.DELETE);
+      source.registerCorsConfiguration("/api/delete_appointment/**", corsConfig);
       return source;
     }
     
