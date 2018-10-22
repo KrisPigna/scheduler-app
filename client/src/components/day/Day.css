@@ -2,23 +2,39 @@
     float: left;
 }
 
-
-.minutes:nth-child(even) {
-    height: 7px;
+.minutes:nth-child(1) {
+    margin-top: -16px;
 }
 
 .minutes:nth-child(odd) {
+    height: 10px;
+}
+
+.minutes:nth-child(even) {
+    height: 10px;
     border-bottom: 1px solid grey;
-    height: 8px;
+}
+
+.custom-row {
+    display: grid;
+    position: relative;
+    grid-template-columns: 1fr 4fr;
+    height: 120px;
+}
+
+.custom-row > td {
+    display: block;
+    height: 120px;
+    border: 1px solid grey;
 }
 
 .appointment {
     display: inline-block;
-    margin-top: -12px;
-    position: block;
+    position: relative;
     width: 100px;
     border: 1px solid navy;
     background-color: lightskyblue;
+    z-index: 1;
 }
 
 .table-container {

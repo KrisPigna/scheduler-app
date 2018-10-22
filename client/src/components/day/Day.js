@@ -39,24 +39,24 @@ class Day extends Component {
     }
 
     getHours() {
-        for (let i = 1; i <= 24; i++) {
-            if (i < 10) {
-                this.state.hours[i-1] = '0' + (i) + ':00AM';
+        for (let i = 0; i < 24; i++) {
+            if (i == 0) {
+                this.state.hours[i] = '12:00AM';
+            }
+            else if (i < 10) {
+                this.state.hours[i] = '0' + (i) + ':00AM';
             }
             else if (i == 12) {
-                this.state.hours[i-1] = (i) + ':00PM';
+                this.state.hours[i] = (i) + ':00PM';
             }
             else if (i == 10 || i == 11) {
-                this.state.hours[i-1] = (i) + ':00AM';
+                this.state.hours[i] = (i) + ':00AM';
             }
             else if (i > 12 && i < 22) {
-                this.state.hours[i-1] = '0' + (i - 12) + ':00PM';
+                this.state.hours[i] = '0' + (i - 12) + ':00PM';
             }
             else if (i == 22 || i == 23) {
-                this.state.hours[i-1] = (i - 12) + ':00PM';
-            }
-            else if (i == 24) {
-                this.state.hours[i-1] = (i - 12) + ':00AM';
+                this.state.hours[i] = (i - 12) + ':00PM';
             }
         }
     }
@@ -95,10 +95,10 @@ class Day extends Component {
             }
             hour.time = this.state.hours[i];
             if (i < 9) {
-                hour.militaryTime = '0' + (i + 1) + ':00';
+                hour.militaryTime = '0' + (i) + ':00';
             }
             else {
-                hour.militaryTime = (i + 1) + ':00';
+                hour.militaryTime = (i) + ':00';
             }
             appointments.forEach(appointment => {
                 if (appointment.startTime.substring(0, 2) == hour.militaryTime.substring(0, 2)) {
@@ -141,10 +141,10 @@ class Day extends Component {
                         index = 11;
                     }
                     for (let k = 0; k <= j- 1; k++) {
-                        console.log(appointment.startTime + " " + appointment.column);
-                        console.log(appointments[k].startTime + " " + appointments[k].column)
+                        console.log(appointment.startTime + " " + appointment.startTimeInMinutes);
+                        console.log(appointments[k].startTime + " " + (appointments[k].startTimeInMinutes + appointments[k].timespan))
                         if (appointment.startTimeInMinutes < (appointments[k].startTimeInMinutes + appointments[k].timespan)
-                            && appointment.column == appointments[k].column) {                   
+                        && appointment.column === appointments[k].column) {                   
                             appointment.column++;
                         }
                     }
@@ -183,7 +183,7 @@ class Day extends Component {
         return (
             <div>
                 <div className="table-container">
-                    <Table columns={columns} dataSource={dataSource} pagination={false} scroll={{ y: 540 }} />
+                    <Table columns={columns} dataSource={dataSource} rowClassName="custom-row" pagination={false} scroll={{ y: 540 }} />
                 </div>
                 <div>
                     <Link className="back" to="/dashboard/calendar"><Icon type="left" />Back to Calendar</Link>
