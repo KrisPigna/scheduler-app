@@ -29,11 +29,12 @@ class UpcomingAppointments extends Component {
         while (this.state.upcomingList.length > 0) {
             this.state.upcomingList.pop();
         }
+        let today = new Date();
         let timespan = new Date();
         timespan.setDate(timespan.getDate() + 3);
         this.props.appointments.forEach(appointment => {
             let apptDate = new Date(appointment.startDate);
-            if (apptDate.getTime() < timespan.getTime()) {
+            if (apptDate.getTime() < timespan.getTime() && apptDate.getTime() >= today.getTime()) {
                 this.state.upcomingList.push(appointment);
             }
         });

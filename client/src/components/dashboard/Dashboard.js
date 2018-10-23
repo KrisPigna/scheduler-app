@@ -8,7 +8,7 @@ import Day from '../day/Day';
 import Appointment from '../appointment/Appointment';
 import User from './User'
 
-import { Layout } from 'antd';
+import { Layout, Menu, Icon, Dropdown } from 'antd';
 
 const { Content, Sider } = Layout;
 

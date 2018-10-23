@@ -175,14 +175,6 @@ class AppointmentCalendar extends Component {
 
         return (
             <div className="calendar">
-                <ButtonGroup>
-                    <Button onClick={this.prevMonth}>
-                        <Icon type="left" />
-                    </Button>
-                    <Button onClick={this.nextMonth}>
-                        <Icon type="right" />
-                    </Button>
-                </ButtonGroup>
                 <Calendar
                     dateCellRender={this.dateCellRender}
                     fullscreen={this.state.fullscreen}

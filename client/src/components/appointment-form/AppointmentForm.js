@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux';
 import { createAppointment } from '../../actions/appointmentActions';
 import { Drawer, DatePicker, TimePicker, Button, Form, Input, Modal } from 'antd';
-
+import moment from 'moment';
 import './AppointmentForm.css'
 
 const FormItem = Form.Item;
@@ -19,6 +19,7 @@ class AppointmentForm extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.onClose = this.onClose.bind(this);
         this.onOpen = this.onOpen.bind(this);
+        this.disabledDates = this.disabledDates.bind(this);
 
         let day = new Date();
         let dd = day.getDate();
@@ -26,7 +27,14 @@ class AppointmentForm extends Component {
         let yyyy = day.getFullYear();
         let today = yyyy + '-' + mm + '-0' + dd;
 
+        day.setDate(day.getDate() - 1);
+        dd = day.getDate();
+        mm = day.getMonth() + 1;
+        yyyy = day.getFullYear();
+        let yesterday = yyyy + '-' + mm + '-0' + dd;
+
         this.state = {
+            yesterday: yesterday,
             title: "",
             startDate: today,
             startTime: "12:00am",
@@ -49,8 +57,17 @@ class AppointmentForm extends Component {
         }
     }
 
+    disabledDates(endValue) {
+        console.log(endValue);
+        const startValue = moment(this.state.yesterday);
+        if (!endValue || !startValue) {
+          return false;
+        }
+        return endValue.valueOf() <= startValue.valueOf();
+      }
+
     setStartDate(date) {
-        this.setState({ startDate: date.format('YYYY-MM-DD') });
+        this.setState({ startDate: date.format('YYYY-MM-DD'), endDate: date.format('YYYY-MM-DD') });
     }
 
     setStartTime(time) {
@@ -113,12 +130,15 @@ class AppointmentForm extends Component {
                             <Input
                                 placeholder="Title"
                                 name="title"
+                                required={true}
                                 value={this.state.title}
                                 onChange={this.onChange}
                             />
                         </FormItem>
                         <FormItem>
                             <DatePicker
+                                disabledDate={this.disabledDates}
+                                value={moment(this.state.startDate)}
                                 placeholder="Start date"
                                 format="YYYY-MM-DD"
                                 onChange={this.setStartDate}
@@ -129,13 +149,6 @@ class AppointmentForm extends Component {
                                 minuteStep={5}
                                 format="h:mm a"
                                 onChange={this.setStartTime}
-                            />
-                        </FormItem>
-                        <FormItem>
-                            <DatePicker
-                                placeholder="End date"
-                                format="YYYY-MM-DD"
-                                onChange={this.setEndDate}
                             />
                             <TimePicker
                                 placeholder="End time"

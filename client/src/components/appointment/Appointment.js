@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 import { deleteAppointment } from '../../actions/appointmentActions'
-import { Card, Modal } from 'antd';
+import { Card, Modal, Icon } from 'antd';
 import './Appointment.css';
 
 class Appointment extends Component {
@@ -68,7 +68,12 @@ class Appointment extends Component {
                     <p>{this.state.selectedApt.notes}</p>
                     <p>{this.state.selectedApt.timespan}</p>
                 </Card>
-                
+                <div>
+                    <Link className="back" to={`/dashboard/day/${this.state.selectedApt.startDate}`}><Icon type="left" />Back to {this.state.selectedApt.startDate}</Link>
+                </div>
+                <div>
+                    <Link className="back" to="/dashboard/calendar"><Icon type="left" />Back to Calendar</Link>
+                </div>
             </div>
         )
     }

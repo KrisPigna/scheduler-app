@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { Table, Icon } from 'antd';
+import { Table, Icon, Menu } from 'antd';
 import { fetchAppointments } from '../../actions/appointmentActions';
 import "./Day.css";
 
@@ -140,21 +140,21 @@ class Day extends Component {
                     if (minutes == '55') {
                         index = 11;
                     }
-                    for (let k = 0; k <= j- 1; k++) {
+                    for (let k = 0; k <= j - 1; k++) {
                         console.log(appointment.startTime + " " + appointment.startTimeInMinutes);
                         console.log(appointments[k].startTime + " " + (appointments[k].startTimeInMinutes + appointments[k].timespan))
                         if (appointment.startTimeInMinutes < (appointments[k].startTimeInMinutes + appointments[k].timespan)
-                        && appointment.column === appointments[k].column) {                   
+                            && appointment.column === appointments[k].column) {
                             appointment.column++;
                         }
                     }
                     hour.appointment[index] = <div key={index} className="minutes">
                         <Link to={`/dashboard/appointment/${appointment._id}`}>
-                            <span 
-                                className="appointment" 
+                            <span
+                                className="appointment"
                                 style={{ height: appointment.timespan * 2, marginLeft: appointment.column * 100 }}
                             >
-                                {appointment.title}<br/>
+                                {appointment.title}<br />
                                 {appointment.startTime}
                             </span>
                         </Link>

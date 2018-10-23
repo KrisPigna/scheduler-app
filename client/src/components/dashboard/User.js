@@ -27,15 +27,15 @@ class User extends Component {
             )
         }
 
-        const menu = (
-            <Menu>
-                <Menu.Item key="1" onClick={this.logout}>Logout</Menu.Item>
-            </Menu>)
-
         return (
-            <Dropdown.Button className="button" overlay={menu} trigger={['click']}>
-                <Icon type="user" /> Hi, {this.state.username}
-            </Dropdown.Button>
+            <Menu mode="horizontal">
+                <Menu.Item>
+                    <Icon type="user" /> Hi, {this.state.username}
+                </Menu.Item>
+                <Menu.Item onClick={this.logout}>
+                    Logout
+                </Menu.Item>
+            </Menu>
         )
     }
 }
