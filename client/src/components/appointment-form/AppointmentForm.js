@@ -25,7 +25,7 @@ class AppointmentForm extends Component {
         let dd = day.getDate();
         let mm = day.getMonth() + 1;
         let yyyy = day.getFullYear();
-        let today = yyyy + '-' + mm + '-0' + dd;
+        let today = yyyy + '-' + mm + '-' + dd;
 
         day.setDate(day.getDate() - 1);
         dd = day.getDate();
@@ -58,7 +58,6 @@ class AppointmentForm extends Component {
     }
 
     disabledDates(endValue) {
-        console.log(endValue);
         const startValue = moment(this.state.yesterday);
         if (!endValue || !startValue) {
           return false;
@@ -67,6 +66,7 @@ class AppointmentForm extends Component {
       }
 
     setStartDate(date) {
+        console.log( date.format('YYYY-MM-DD'));
         this.setState({ startDate: date.format('YYYY-MM-DD'), endDate: date.format('YYYY-MM-DD') });
     }
 

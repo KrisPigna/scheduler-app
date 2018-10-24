@@ -7,6 +7,7 @@ import UpcomingAppointments from '../upcoming-appointments/UpcomingAppointments'
 import Day from '../day/Day';
 import Appointment from '../appointment/Appointment';
 import User from './User'
+import AllAppointments from '../all-appointments/AllAppointments';
 
 import { Layout, Menu, Icon, Dropdown } from 'antd';
 
@@ -32,6 +33,7 @@ class Dashboard extends Component {
                         <Route exact path="/dashboard/calendar" component={AppointmentCalendar} />
                         <Route exact path="/dashboard/day/:day" component={Day} />
                         <Route exact path="/dashboard/appointment/:id" component={Appointment} />
+                        <Route exact path="/dashboard/all_appointments" component={AllAppointments} />
                     </Content>
                 </Layout>
             </Layout>
