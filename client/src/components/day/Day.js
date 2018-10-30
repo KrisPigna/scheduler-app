@@ -25,7 +25,19 @@ class Day extends Component {
 
     componentDidUpdate(prevProps) {
         if (this.props.response !== prevProps.response) {
-            this.props.fetchAppointments();
+            let req = {
+                appointment: {
+                    title: "",
+                    startDate: "",
+                    startTime: "",
+                    endDate: "",
+                    endTime: "",
+                    notes: "",
+                    attendees: []
+                },
+                token: this.props.credentials.token
+            };
+            this.props.fetchAppointments(req);
         }
     }
 
@@ -101,8 +113,30 @@ class Day extends Component {
                 hour.militaryTime = (i) + ':00';
             }
             appointments.forEach(appointment => {
-                if (appointment.startTime.substring(0, 2) == hour.militaryTime.substring(0, 2)) {
-                    let minutes = appointment.startTime.substring(3, 5);
+                let  militaryHour = parseInt(appointment.startTime.substring(0, 2));
+                if (appointment.startTime.length == 7) {
+                    if (appointment.startTime[5] == 'p' && militaryHour != 12) {
+                        console.log(appointment.startTime[5]);
+                        militaryHour = parseInt(appointment.startTime.substring(0, 2)) + 12;
+                        console.log(militaryHour);
+                    }
+                }
+                if (appointment.startTime.length == 6) {
+                    if (appointment.startTime[4] == 'p' && militaryHour != 12) {
+                        console.log(appointment.startTime[4])
+                        militaryHour = parseInt(appointment.startTime.substring(0, 2)) + 12;
+                        console.log(militaryHour);
+                    }
+                }
+                if (militaryHour == hour.militaryTime.substring(0, 2)) {
+                    let minutes = "00";
+                    if (appointment.startTime.length == 7) {
+                        minutes = appointment.startTime.substring(3, 5);
+                    }
+                    if (appointment.startTime.length == 6) {
+                        minutes = appointment.startTime.substring(2, 4);
+                    }
+                    console.log(minutes);
                     let index = null;
                     if (minutes == '00') {
                         index = 0;
@@ -195,7 +229,8 @@ class Day extends Component {
 
 const mapStateToProps = state => ({
     appointments: state.appointments.appointments,
-    response: state.appointments.response
+    response: state.appointments.response,
+    credentials: state.users.credentials
 });
 
 export default connect(mapStateToProps, { fetchAppointments })(Day);

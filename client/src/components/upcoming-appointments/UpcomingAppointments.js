@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { fetchAppointments } from '../../actions/appointmentActions';
 import { Card, Divider } from 'antd';
 import './UpcomingAppointments.css'
 
@@ -76,4 +75,4 @@ const mapStateToProps = state => ({
     response: state.appointments.response
 });
 
-export default connect(mapStateToProps, { fetchAppointments })(UpcomingAppointments);
+export default connect(mapStateToProps, { })(UpcomingAppointments);

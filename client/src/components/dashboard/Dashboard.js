@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import { Route } from 'react-router-dom';
+import { Route, Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 import AppointmentForm from '../appointment-form/AppointmentForm';
 import AppointmentCalendar from '../calendar/AppointmentCalendar';
@@ -15,30 +16,49 @@ const { Content, Sider } = Layout;
 
 class Dashboard extends Component {
 
+    componentDidMount() {
+        console.log("dashboard mounted")
+    }
+
+    componentDidUpdate() {
+        console.log("dashboard mounted")
+    }
+
     render() {
-        return (
-            <Layout className="container">
-                <Sider
-                    breakpoint="lg"
-                    collapsedWidth="0"
-                    onBreakpoint={(broken) => { console.log(broken); }}
-                    onCollapse={(collapsed, type) => { console.log(collapsed, type); }}
-                >
-                    <User />
-                    <AppointmentForm />
-                    <UpcomingAppointments />
-                </Sider>
-                <Layout>
-                    <Content className="content">
-                        <Route exact path="/dashboard/calendar" component={AppointmentCalendar} />
-                        <Route exact path="/dashboard/day/:day" component={Day} />
-                        <Route exact path="/dashboard/appointment/:id" component={Appointment} />
-                        <Route exact path="/dashboard/all_appointments" component={AllAppointments} />
-                    </Content>
+        if (this.props.credentials === null) {
+            return (
+                <Redirect to="/" />
+            )
+        }
+        else {
+            return (
+                <Layout className="container">
+                    <Sider
+                        breakpoint="lg"
+                        collapsedWidth="0"
+                        onBreakpoint={(broken) => { console.log(broken); }}
+                        onCollapse={(collapsed, type) => { console.log(collapsed, type); }}
+                    >
+                        <User />
+                        <AppointmentForm />
+                        <UpcomingAppointments />
+                    </Sider>
+                    <Layout>
+                        <Content className="content">
+                            <Route exact path="/dashboard/calendar" component={AppointmentCalendar} />
+                            <Route exact path="/dashboard/day/:day" component={Day} />
+                            <Route exact path="/dashboard/appointment/:id" component={Appointment} />
+                            <Route exact path="/dashboard/all_appointments" component={AllAppointments} />
+                        </Content>
+                    </Layout>
                 </Layout>
-            </Layout>
-        )
+            )
+        }
     }
 }
 
-export default Dashboard;
+const mapStateToProps = state => ({
+    credentials: state.users.credentials
+});
+
+export default connect(mapStateToProps, {})(Dashboard);

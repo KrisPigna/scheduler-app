@@ -5,3 +5,4 @@ export const EDIT_APPOINTMENT = 'EDIT_APPOINTMENT';
 
 export const NEW_USER = 'NEW_USER';
 export const LOGIN_USER = 'LOGIN_USER';
+export const LOGOUT_USER = 'LOGOUT_USER';

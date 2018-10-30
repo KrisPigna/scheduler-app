@@ -2,9 +2,10 @@ import React, { Component } from 'react'
 import { Redirect } from 'react-router-dom';
 import './Landing.css';
 import { connect } from 'react-redux'
-import { createUser, loginUser } from '../../actions/userActions'
+import { createUser, loginUser, clearUser } from '../../actions/userActions'
 
-import { Form, Icon, Input, Button, Checkbox, Tabs, Layout } from 'antd';
+import { Form, Icon, Input, Button, Checkbox, Tabs, Layout, Modal } from 'antd';
+import { decode } from 'punycode';
 
 const FormItem = Form.Item;
 
@@ -23,7 +24,7 @@ class Landing extends Component {
         this.onChange = this.onChange.bind(this);
 
         this.state = {
-            remember: false,
+            remember: "false",
             validated: false,
             username: "",
             password: ""
@@ -31,35 +32,65 @@ class Landing extends Component {
     }
 
     componentWillMount() {
-        console.log(localStorage.getItem("token"));
-        if (localStorage.getItem("token")) {
-            this.setState({ validated: true });
-        }
-    }
-
-    componentDidUpdate(prevProps) {
-        console.log(this.props.token);
-        console.log(this.state.remember);
-        if (this.props.token !== null && this.props.token !== prevProps.token) {
-            localStorage.setItem("token", this.props.token);
-            localStorage.setItem("username", this.props.username);
-            this.setState({ validated: true });
-        }
-        if (this.props.created === true) {
+        let cookie = document.cookie;
+        if (cookie != "") {
             let user = {
-                username: this.props.form.getFieldValue("username"),
-                password: this.props.form.getFieldValue("password")
+                username: "",
+                password: "",
+                remember: "",
+                cookie: cookie
             }
             this.props.loginUser(user);
         }
     }
 
+    componentDidUpdate(prevProps) {
+        console.log(this.props.credentials);
+        console.log(this.state.remember);
+        console.log(this.props.newUser);
+        if (this.props.credentials !== null && this.props.credentials !== prevProps.credentials) {
+            if (this.props.credentials.failed == true) {
+                Modal.error({
+                    content: "Username or password is incorrect"
+                })
+            }
+            else {
+                if (this.props.credentials.cookie !== undefined) {
+                    console.log(this.props.credentials.cookie);
+                    document.cookie = 'rememberme' + '=' + this.props.credentials.cookie;
+                }
+                this.setState({ validated: true });
+            }
+        }
+        if (this.props.newUser.created === true) {
+            let user = {
+                username: this.props.form.getFieldValue("username"),
+                password: this.props.form.getFieldValue("password"),
+                remember: "false",
+                cookie: null
+            }
+            this.props.loginUser(user);
+        }
+        if (this.props.newUser.created === false) {
+            let cause = this.props.newUser.duplicate;
+            Modal.error({
+                content: "An account with this " + cause + " already exists."
+            });
+            this.props.clearUser();
+        }
+    }
+
     onChange(e) {
-        this.setState({[e.target.name]: e.target.value});
+        this.setState({ [e.target.name]: e.target.value });
     }
 
     toggleRemember() {
-        this.setState({ remember: !this.state.remember });
+        if (this.state.remember == "false") {
+            this.setState({ remember: "true" });
+        }
+        else if (this.state.remember == "true") {
+            this.setState({ remember: "false" });
+        }
     }
 
     validateUsername(rule, value, callback) {
@@ -114,7 +145,7 @@ class Landing extends Component {
                 callback();
             }
         }
-        catch(err) {
+        catch (err) {
             console.log(err);
         }
     }
@@ -145,17 +176,23 @@ class Landing extends Component {
         let user = {
             username: this.state.username,
             password: this.state.password,
-            //remember: this.state.remember
+            remember: this.state.remember,
+            cookie: null
         }
         console.log(user);
 
         this.props.loginUser(user);
     }
 
+    rememberedUser() {
+        console.log("hi");
+    }
+
     render() {
         const { getFieldDecorator } = this.props.form;
 
         if (this.state.validated === true) {
+            console.log("landing");
             return (
                 <Redirect to="/dashboard/calendar" />
             )
@@ -281,11 +318,11 @@ class Landing extends Component {
 }
 
 const mapStateToProps = state => ({
-    token: state.users.token,
+    credentials: state.users.credentials,
     username: state.users.username,
-    created: state.users.created
+    newUser: state.users.newUser
 });
 
 const WrappedRegistrationForm = Form.create()(Landing);
 
-export default connect(mapStateToProps, { createUser, loginUser })(WrappedRegistrationForm);
+export default connect(mapStateToProps, { createUser, loginUser, clearUser })(WrappedRegistrationForm);

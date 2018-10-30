@@ -1,11 +1,14 @@
 import { FETCH_APPOINTMENTS, NEW_APPOINTMENT, DELETE_APPOINTMENT } from './types';
 
-export const fetchAppointments = () => dispatch => {
+export const fetchAppointments = (req) => dispatch => {
     fetch('http://localhost:8080/api/get_appointments', {
         headers: {
-            'Authorization': 'Bearer ' + localStorage.getItem("token")
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + req.token
         },
-        method: 'get'
+        method: 'post',
+        body: JSON.stringify(req)
     })
         .then(res => res.json())
         .then(appointments => dispatch({
@@ -14,15 +17,15 @@ export const fetchAppointments = () => dispatch => {
         }))
 }
 
-export const createAppointment = (appointment) => dispatch => {
+export const createAppointment = (req) => dispatch => {
     fetch('http://localhost:8080/api/new_appointment', {
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + localStorage.getItem("token")
+            'Authorization': 'Bearer ' + req.token
         },
         method: 'post',
-        body: JSON.stringify(appointment)
+        body: JSON.stringify(req)
     })
         .then(res => res.json())
         .then(res => dispatch({
@@ -31,15 +34,15 @@ export const createAppointment = (appointment) => dispatch => {
         }))
 }
 
-export const deleteAppointment = (id) => dispatch => {
-    let url = 'http://localhost:8080/api/delete_appointment/' + id;
-    fetch(url, {
+export const deleteAppointment = (req) => dispatch => {
+    fetch('http://localhost:8080/api/delete_appointment', {
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + localStorage.getItem("token")
+            'Authorization': 'Bearer ' + req.token
         },
-        method: 'delete',
+        method: 'post',
+        body: JSON.stringify(req)
     })
         .then(res => res.json())
         .then(appointments => dispatch({

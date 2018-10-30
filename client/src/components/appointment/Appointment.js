@@ -40,12 +40,15 @@ class Appointment extends Component {
     }
 
     deleteAppointment() {
+        console.log(this.state.selectedApt);
+        let req = {appointment: this.state.selectedApt, 
+            token: this.props.credentials.token};
         Modal.confirm({
             title: 'Confirm',
             content: 'This will permanently delete the appointment. Continue?',
             okText: 'Yes',
             cancelText: 'Cancel',
-            onOk: () => {this.props.deleteAppointment(this.state.selectedApt._id);}
+            onOk: () => {this.props.deleteAppointment(req);}
         })
     }
 
@@ -81,7 +84,8 @@ class Appointment extends Component {
 
 const mapStateToProps = state => ({
     appointments: state.appointments.appointments,
-    response: state.appointments.response
+    response: state.appointments.response,
+    credentials: state.users.credentials
 });
 
 export default connect(mapStateToProps, {deleteAppointment})(Appointment);

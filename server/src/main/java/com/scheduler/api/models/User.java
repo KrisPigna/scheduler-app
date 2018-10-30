@@ -1,18 +1,36 @@
 package com.scheduler.api.models;
 
+import java.util.List;
+
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 
 public class User {
-	@Id
-	private ObjectId _id;
+	@Id private ObjectId _id;
+	@Indexed(unique=true)
 	private String username;
+	
+	@Indexed(unique=true)
 	private String email;
-
+	
+	@Indexed(unique=true)
 	private String password;
+	
+	private String rememberToken;
+	
+	private List<Appointment> appointmentList;
 	
 	public User() {
 		
+	}
+
+	public List<Appointment> getAppointmentList() {
+		return appointmentList;
+	}
+
+	public void setAppointmentList(List<Appointment> appointmentList) {
+		this.appointmentList = appointmentList;
 	}
 
 	public String get_id() {
@@ -45,6 +63,14 @@ public class User {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public String getRememberToken() {
+		return rememberToken;
+	}
+
+	public void setRememberToken(String rememberToken) {
+		this.rememberToken = rememberToken;
 	}
 	
 	

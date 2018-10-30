@@ -92,7 +92,7 @@ class AppointmentForm extends Component {
     handleSubmit(e) {
         e.preventDefault();
         console.log(this.state.attendees);
-        let appointment = {
+        let newAppt = {
             title: this.state.title,
             startDate: this.state.startDate,
             startTime: this.state.startTime,
@@ -101,8 +101,9 @@ class AppointmentForm extends Component {
             notes: this.state.notes,
             attendees: this.state.attendees.split(',')
         }
-        console.log(JSON.stringify(appointment));
-        this.props.createAppointment(appointment);
+        let request = {appointment: newAppt, token: this.props.credentials.token};
+        console.log(JSON.stringify(request));
+        this.props.createAppointment(request);
         this.onClose();
     }
 
@@ -190,7 +191,8 @@ class AppointmentForm extends Component {
 }
 
 const mapStateToProps = state => ({
-    response: state.appointments.response
+    response: state.appointments.response,
+    credentials: state.users.credentials
 });
 
 export default connect(mapStateToProps, { createAppointment })(AppointmentForm);

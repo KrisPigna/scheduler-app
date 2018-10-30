@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { fetchAppointments } from '../../actions/appointmentActions';
 import { Table, Icon } from 'antd';
 
 class AllAppointments extends Component {
@@ -14,10 +13,10 @@ class AllAppointments extends Component {
     buildAppointmentsList() {
         let list = [];
         this.props.appointments.forEach(appointment => {
-            if (list.find(x => x.day === appointment.startDate)) {
-                list.find(x => x.day === appointment.startDate).appointments.push(
+            if (list.find(x => x.day == appointment.startDate)) {
+                list.find(x => x.day == appointment.startDate).appointments.push(
                     <div key={appointment._id}>
-                        {appointment.title}<br />
+                       <Link to={`/dashboard/appointment/${appointment._id}`}>{appointment.title}</Link><br />
                         {appointment.startTime}<br />
                         {appointment.endTime}<br />
                         {appointment.attendees}<br />
@@ -29,7 +28,7 @@ class AllAppointments extends Component {
                 let dayEntry = { key: appointment.startDate, day: appointment.startDate, appointments: [] };
                 dayEntry.appointments.push(
                     <div key={appointment._id}>
-                        {appointment.title}<br />
+                        <Link to={`/dashboard/appointment/${appointment._id}`}>{appointment.title}</Link><br />
                         {appointment.startTime}<br />
                         {appointment.endTime}<br />
                         {appointment.attendees}<br />
@@ -59,7 +58,7 @@ class AllAppointments extends Component {
 
         return (
             <div>
-                <div>
+                <div className="table-container">
                     <Table columns={columns} dataSource={dataSource} pagination={false} scroll={{ y: 540 }} />
                 </div>
                 <div>
@@ -75,4 +74,4 @@ const mapStateToProps = state => ({
     response: state.appointments.response
 });
 
-export default connect(mapStateToProps, { fetchAppointments })(AllAppointments);
+export default connect(mapStateToProps, { })(AllAppointments);

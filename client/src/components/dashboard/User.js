@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import { Icon, Dropdown, Menu } from 'antd';
+import { Icon, Menu } from 'antd';
 
 class User extends Component {
     constructor(props) {
@@ -10,13 +11,12 @@ class User extends Component {
 
         this.state = {
             validated: true,
-            username: localStorage.getItem("username")
+            username: this.props.username
         }
     }
 
     logout() {
-        localStorage.removeItem("token");
-        localStorage.removeItem("username");
+        document.cookie = "rememberme = ;expires=Thu, 01 Jan 1970 00:00:01 GMT";
         this.setState({ validated: false });
     }
 
@@ -40,4 +40,8 @@ class User extends Component {
     }
 }
 
-export default User;
+const mapStateToProps = state => ({
+    username: state.users.username
+});
+
+export default connect(mapStateToProps, {})(User);

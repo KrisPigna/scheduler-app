@@ -36,12 +36,36 @@ class AppointmentCalendar extends Component {
     componentDidMount() {
         this.toggleFullscreen();
         window.addEventListener('resize', this.toggleFullscreen);
-        this.props.fetchAppointments();
+        let req = {
+            appointment: {
+                title: "",
+                startDate: "",
+                startTime: "",
+                endDate: "",
+                endTime: "",
+                notes: "",
+                attendees: []
+            },
+            token: this.props.credentials.token
+        };
+        this.props.fetchAppointments(req);
     }
 
     componentDidUpdate(prevProps) {
         if (this.props.response !== prevProps.response) {
-            this.props.fetchAppointments();
+            let req = {
+                appointment: {
+                    title: "",
+                    startDate: "",
+                    startTime: "",
+                    endDate: "",
+                    endTime: "",
+                    notes: "",
+                    attendees: []
+                },
+                token: this.props.credentials.token
+            };
+            this.props.fetchAppointments(req);
         }
         this.buildDrawerList();
     }
@@ -58,11 +82,11 @@ class AppointmentCalendar extends Component {
             this.props.appointments.forEach(appointment => {
                 let duplicate = this.state.showDrawer.findIndex(x => x.day === appointment.startDate);
                 if (duplicate === -1) {
-                    this.state.showDrawer.push({day: appointment.startDate, value: false})
+                    this.state.showDrawer.push({ day: appointment.startDate, value: false })
                 }
             })
         }
-        catch(err) {
+        catch (err) {
             console.log(err);
         }
     }
@@ -150,7 +174,7 @@ class AppointmentCalendar extends Component {
                 const title = <Link to={`/dashboard/day/${day}`}>{day}</Link>;
                 return (
                     <div>
-                        <Badge count={appointments.length} onClick={() => this.onOpen(day)}/>
+                        <Badge count={appointments.length} onClick={() => this.onOpen(day)} />
                         <Drawer
                             title={title}
                             placement="bottom"
@@ -187,7 +211,8 @@ class AppointmentCalendar extends Component {
 
 const mapStateToProps = state => ({
     appointments: state.appointments.appointments,
-    response: state.appointments.response
+    response: state.appointments.response,
+    credentials: state.users.credentials
 });
 
 export default connect(mapStateToProps, { fetchAppointments })(AppointmentCalendar);

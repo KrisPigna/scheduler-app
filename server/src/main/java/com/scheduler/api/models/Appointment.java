@@ -54,8 +54,26 @@ public class Appointment {
 		this.startDate = startDate;
 	}
 
-	public LocalTime getStartTime() {
-		return startTime;
+	public String getStartTime() {
+		int hour = startTime.getHour();
+		int minutes = startTime.getMinute();
+		String minutesString;
+		String suffix = "am";
+		if (hour >=13) {
+			hour -= 12;
+			suffix = "pm";
+		}
+		if (hour == 12) {
+			suffix = "pm";
+		}
+		if (minutes == 0) {
+			minutesString = "00";
+		}
+		else {
+			minutesString = Integer.toString(minutes);
+		}
+		String time = Integer.toString(hour) + ":" + minutesString + suffix;
+		return time;
 	}
 
 	public void setStartTime(LocalTime startTime) {
@@ -70,8 +88,26 @@ public class Appointment {
 		this.endDate = endDate;
 	}
 
-	public LocalTime getEndTime() {
-		return endTime;
+	public String getEndTime() {
+		int hour = endTime.getHour();
+		int minutes = endTime.getMinute();
+		String minutesString;
+		String suffix = "am";
+		if (hour >=13) {
+			hour -= 12;
+			suffix = "pm";
+		}
+		if (hour == 12) {
+			suffix = "pm";
+		}
+		if (minutes == 0) {
+			minutesString = "00";
+		}
+		else {
+			minutesString = Integer.toString(minutes);
+		}
+		String time = Integer.toString(hour) + ":" + minutesString + suffix;
+		return time;
 	}
 
 	public void setEndTime(LocalTime endTime) {
