@@ -54,7 +54,6 @@ public class UserController {
 			String message = e.getMessage();
 			int i = message.indexOf("$");
 			String cause = message.substring(i + 1, i + 2);
-			System.out.println(cause);
 			if (cause.equals("u")) {
 				return "{\"created\": false, \"duplicate\": \"username\"}";
 			}
@@ -89,8 +88,6 @@ public class UserController {
 			    	    String cookie = user.get_id() + ":" + randomNum;
 			    	    String hashedCookie =  bCryptPasswordEncoder.encode(cookie);
 			    	    cookie += ":" + hashedCookie;
-			    	    System.out.println(randomNum);
-			    	    System.out.println(cookie);
 						token = JWT.create()
 				                .withSubject(req.getUsername())
 				                .withExpiresAt(new Date(System.currentTimeMillis() + SecurityConstants.EXPIRATION_TIME))
@@ -117,17 +114,12 @@ public class UserController {
 			String cookie = req.getCookie();
 			cookie = cookie.substring(11);
 			String[] cookieArray = cookie.split("\\:");
-			System.out.println(cookieArray[0] + ":" + cookieArray[1]);
 			if (bCryptPasswordEncoder.matches(cookieArray[0] + ":" + cookieArray[1], cookieArray[2]) == false) {
-				System.out.println("failing first check");
 				return "{\"cookie\": false}";
 			}
 			else {
 				ObjectId id = new ObjectId(cookieArray[0]);
-				System.out.println("ObjectId: " + id);
-				System.out.println("Id: " + cookieArray[0]);
 				User user = repository.findBy_id(id);
-				System.out.println(user.getUsername());
 				if (user.getRememberToken().equals(cookieArray[1])) {
 					SecureRandom prng;
 					try {
@@ -138,8 +130,6 @@ public class UserController {
 			    	    cookie = user.get_id() + ":" + randomNum;
 			    	    String hashedCookie =  bCryptPasswordEncoder.encode(cookie);
 			    	    cookie += ":" + hashedCookie;
-			    	    System.out.println(randomNum);
-			    	    System.out.println(cookie);
 						token = JWT.create()
 				                .withSubject(user.getUsername())
 				                .withExpiresAt(new Date(System.currentTimeMillis() + SecurityConstants.EXPIRATION_TIME))

@@ -10,19 +10,11 @@ import Appointment from '../appointment/Appointment';
 import User from './User'
 import AllAppointments from '../all-appointments/AllAppointments';
 
-import { Layout, Menu, Icon, Dropdown } from 'antd';
+import { Layout } from 'antd';
 
 const { Content, Sider } = Layout;
 
 class Dashboard extends Component {
-
-    componentDidMount() {
-        console.log("dashboard mounted")
-    }
-
-    componentDidUpdate() {
-        console.log("dashboard mounted")
-    }
 
     render() {
         if (this.props.credentials === null) {
@@ -36,8 +28,6 @@ class Dashboard extends Component {
                     <Sider
                         breakpoint="lg"
                         collapsedWidth="0"
-                        onBreakpoint={(broken) => { console.log(broken); }}
-                        onCollapse={(collapsed, type) => { console.log(collapsed, type); }}
                     >
                         <User />
                         <AppointmentForm />

@@ -31,7 +31,6 @@ export const logout = () => dispatch => {
 }
 
 export const loginUser = (user) => dispatch => {
-        console.log(JSON.stringify(user))
     fetch('http://localhost:8080/api/sign_in', {
         headers: {
             'Accept': 'application/json',
@@ -42,7 +41,6 @@ export const loginUser = (user) => dispatch => {
     })
         .then(res => res.json())
         .then(res => {
-            console.log(res);
             dispatch({
             type: LOGIN_USER,
             payload: res

@@ -16,7 +16,7 @@ class UpcomingAppointments extends Component {
         }
     }
 
-    componentDidMount() {
+    componentWillMount() {
         this.generateUpcomingList();
     }
 
@@ -32,20 +32,38 @@ class UpcomingAppointments extends Component {
         let timespan = new Date();
         timespan.setDate(timespan.getDate() + 3);
         this.props.appointments.forEach(appointment => {
-            let apptDate = new Date(appointment.startDate);
+            let apptDate = new Date(appointment.startDate+"T"+appointment.startTime);
+            console.log("Timespan " + timespan)
+            console.log("App Time " + apptDate);
+            console.log("Today " + today)
             if (apptDate.getTime() < timespan.getTime() && apptDate.getTime() >= today.getTime()) {
+                console.log("added")
                 this.state.upcomingList.push(appointment);
             }
         });
+        this.state.upcomingList.sort((a, b) => {
+            let dateA = new Date(a.startDate+"T"+a.startTime);
+            let dateB = new Date(b.startDate+"T"+b.startTime);
+            if (dateA.getTime() < dateB.getTime()) {
+                return -1;
+            }
+            else if (dateA.getTime() > dateB.getTime()) {
+                return 1;
+            }
+            else {
+                return 0;
+            }
+        });
+        console.log(this.state.upcomingList)
     }
 
     displayUpcomingAppointments() {
         if (this.state.upcomingList.length > 0) {
             return this.state.upcomingList.map(appointment => {
                 return <div key={appointment._id}>
-                            {appointment.title}:<br/>
+                            <Link to={`/dashboard/appointment/${appointment._id}`}>{appointment.title}:</Link><br/>
                             {appointment.startDate}<br/>
-                            {appointment.startTime}
+                            {appointment.displayStart}
                             <Divider />
                         </div>
             })

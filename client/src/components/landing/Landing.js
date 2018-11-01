@@ -5,7 +5,6 @@ import { connect } from 'react-redux'
 import { createUser, loginUser, clearUser } from '../../actions/userActions'
 
 import { Form, Icon, Input, Button, Checkbox, Tabs, Layout, Modal } from 'antd';
-import { decode } from 'punycode';
 
 const FormItem = Form.Item;
 
@@ -45,9 +44,6 @@ class Landing extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        console.log(this.props.credentials);
-        console.log(this.state.remember);
-        console.log(this.props.newUser);
         if (this.props.credentials !== null && this.props.credentials !== prevProps.credentials) {
             if (this.props.credentials.failed == true) {
                 Modal.error({
@@ -56,7 +52,6 @@ class Landing extends Component {
             }
             else {
                 if (this.props.credentials.cookie !== undefined) {
-                    console.log(this.props.credentials.cookie);
                     document.cookie = 'rememberme' + '=' + this.props.credentials.cookie;
                 }
                 this.setState({ validated: true });
@@ -103,7 +98,7 @@ class Landing extends Component {
             }
         }
         catch (err) {
-            console.log(err);
+           
         }
 
     }
@@ -128,7 +123,7 @@ class Landing extends Component {
             }
         }
         catch (err) {
-            console.log(err);
+        
         }
 
     }
@@ -146,7 +141,7 @@ class Landing extends Component {
             }
         }
         catch (err) {
-            console.log(err);
+        
         }
     }
 
@@ -154,19 +149,14 @@ class Landing extends Component {
     createUser(e) {
         e.preventDefault();
         const form = this.props.form;
-        console.log("Inside create")
         form.validateFields((err, values) => {
             if (!err) {
-                console.log('Received values of form: ', values);
                 let user = {
                     username: form.getFieldValue("username"),
                     email: form.getFieldValue("email"),
                     password: form.getFieldValue("password")
                 }
                 this.props.createUser(user);
-            }
-            else {
-                console.log("Fields are invalid")
             }
         });
     }
@@ -179,20 +169,12 @@ class Landing extends Component {
             remember: this.state.remember,
             cookie: null
         }
-        console.log(user);
-
         this.props.loginUser(user);
     }
-
-    rememberedUser() {
-        console.log("hi");
-    }
-
     render() {
         const { getFieldDecorator } = this.props.form;
 
         if (this.state.validated === true) {
-            console.log("landing");
             return (
                 <Redirect to="/dashboard/calendar" />
             )

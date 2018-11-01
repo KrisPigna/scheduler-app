@@ -19,11 +19,16 @@ class Appointment extends Component {
     }
 
     componentWillMount() {
-        this.props.appointments.forEach(appointment => {
-            if (appointment._id == this.props.match.params.id) {
-                this.setState({selectedApt: appointment});
-            }
-        });
+        try {
+            this.props.appointments.forEach(appointment => {
+                if (appointment._id == this.props.match.params.id) {
+                    this.setState({ selectedApt: appointment });
+                }
+            });
+        }
+        catch(e) {
+            
+        }
     }
 
     componentDidUpdate(prevProps) {
@@ -31,24 +36,24 @@ class Appointment extends Component {
             Modal.success({
                 content: "Appointment deleted"
             });
-            this.setState({redirect: true})
+            this.setState({ redirect: true })
         }
     }
 
     editAppointment() {
-        console.log(this.state.selectedApt._id);
     }
 
     deleteAppointment() {
-        console.log(this.state.selectedApt);
-        let req = {appointment: this.state.selectedApt, 
-            token: this.props.credentials.token};
+        let req = {
+            appointment: this.state.selectedApt,
+            token: this.props.credentials.token
+        };
         Modal.confirm({
             title: 'Confirm',
             content: 'This will permanently delete the appointment. Continue?',
             okText: 'Yes',
             cancelText: 'Cancel',
-            onOk: () => {this.props.deleteAppointment(req);}
+            onOk: () => { this.props.deleteAppointment(req); }
         })
     }
 
@@ -61,15 +66,17 @@ class Appointment extends Component {
                 <Card
                     title={this.state.selectedApt.title}
                     actions={[
-                        <div onClick={this.editAppointment}>Edit</div>,
+                        //<div onClick={this.editAppointment}>Edit</div0>,
                         <div onClick={this.deleteAppointment}>Delete</div>
                     ]}
                 >
-                    <p>{this.state.selectedApt.startDate}</p>
-                    <p>{this.state.selectedApt.startTime} - {this.state.selectedApt.endTime}</p>
-                    <p>{this.state.selectedApt.attendees}</p>
-                    <p>{this.state.selectedApt.notes}</p>
-                    <p>{this.state.selectedApt.timespan}</p>
+                    <div className="contents">
+                        <p><span className="label">Date: </span>{this.state.selectedApt.startDate}</p>
+                        <p><span className="label">Time: </span>{this.state.selectedApt.displayStart} - {this.state.selectedApt.displayEnd}</p>
+                        <p><span className="label">Length: </span>{this.state.selectedApt.timespan} mins</p>
+                        <p><span className="label">Attendees: </span>{this.state.selectedApt.attendees}</p>
+                        <p><span className="label">Notes: </span>{this.state.selectedApt.notes}</p>
+                    </div>
                 </Card>
                 <div>
                     <Link className="back" to={`/dashboard/day/${this.state.selectedApt.startDate}`}><Icon type="left" />Back to {this.state.selectedApt.startDate}</Link>
@@ -88,4 +95,4 @@ const mapStateToProps = state => ({
     credentials: state.users.credentials
 });
 
-export default connect(mapStateToProps, {deleteAppointment})(Appointment);
+export default connect(mapStateToProps, { deleteAppointment })(Appointment);

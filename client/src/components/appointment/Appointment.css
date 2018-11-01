@@ -1,6 +1,15 @@
 .appointment-card {
     max-width: 500px;
     margin: auto;
-    padding-top: 20%;
+    padding-top: 10%;
     padding-bottom: 20%;
+}
+
+.label {
+    font-weight: bold;
+}
+
+.contents {
+    text-align: left;
+    margin-left: 3em;
 }

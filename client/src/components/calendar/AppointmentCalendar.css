@@ -3,20 +3,15 @@
     text-overflow: ellipsis;
     height: inherit;
     width: inherit;
-    list-style-type: none;
-}
-
-.appointments > li::before {
-    content: "\23F5";
-    color: blue;
-    font-weight: bold;
-    font-size: smaller;
-    display: inline-block;
-    width: 15px;
-    margin-left: -3em;
+    text-align: center;
 }
 
 .calendar {
     padding: 24px;
     background: #fff;
+}
+
+.tag {
+    width: 100%;
+    text-align: center;
 }

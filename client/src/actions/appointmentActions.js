@@ -11,10 +11,25 @@ export const fetchAppointments = (req) => dispatch => {
         body: JSON.stringify(req)
     })
         .then(res => res.json())
-        .then(appointments => dispatch({
+        .then(appointments => {
+            appointments.sort((a, b) => {
+                let dateA = new Date(a.startDate+"T"+a.startTime);
+                let dateB = new Date(b.startDate+"T"+b.startTime);
+                if (dateA.getTime() < dateB.getTime()) {
+                    return -1;
+                }
+                else if (dateA.getTime() > dateB.getTime()) {
+                    return 1;
+                }
+                else {
+                    return 0;
+                }
+            });
+            dispatch({
             type: FETCH_APPOINTMENTS,
             payload: appointments
-        }))
+        })
+    })
 }
 
 export const createAppointment = (req) => dispatch => {
@@ -45,8 +60,23 @@ export const deleteAppointment = (req) => dispatch => {
         body: JSON.stringify(req)
     })
         .then(res => res.json())
-        .then(appointments => dispatch({
-            type: DELETE_APPOINTMENT,
+        .then(appointments => {
+            appointments.sort((a, b) => {
+                let dateA = new Date(a.startDate+"T"+a.startTime);
+                let dateB = new Date(b.startDate+"T"+b.startTime);
+                if (dateA.getTime() < dateB.getTime()) {
+                    return -1;
+                }
+                else if (dateA.getTime() > dateB.getTime()) {
+                    return 1;
+                }
+                else {
+                    return 0;
+                }
+            });
+            dispatch({
+            type: FETCH_APPOINTMENTS,
             payload: appointments
-        }))
+        })
+    })
 }

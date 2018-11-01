@@ -44,6 +44,8 @@ public class AppointmentController {
 		appointment.setTimespan();
 		appointment.setStartTimeInMinutes();
 		appointment.setColumn();
+		appointment.setDisplayStart();
+		appointment.setDisplayEnd();
 		apptList.add(appointment);
 		user.setAppointmentList(apptList);
 		userRepository.save(user);
@@ -62,12 +64,8 @@ public class AppointmentController {
 		DecodedJWT token = JWT.decode(req.getToken());
 		User user = userRepository.findByUsername(token.getSubject());
 		List<Appointment> apptList = user.getAppointmentList();
-		System.out.println(appointment.get_id());
 		for (int i = 0; i < apptList.size(); i++) {
-			System.out.println(apptList.get(i).get_id());
 			if(apptList.get(i).get_id().equals(appointment.get_id())) {
-				System.out.println(apptList.get(i).get_id());
-				System.out.println(appointment.get_id());
 				apptList.remove(i);
 			}
 		}

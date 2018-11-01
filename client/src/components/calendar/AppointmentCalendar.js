@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { fetchAppointments } from '../../actions/appointmentActions';
-import { Calendar, Drawer, Button, Icon, Popover, Badge } from 'antd';
+import { Calendar, Drawer, Tag, Popover, Badge } from 'antd';
 import moment from 'moment';
 import './AppointmentCalendar.css'
 
@@ -43,6 +43,8 @@ class AppointmentCalendar extends Component {
                 startTime: "",
                 endDate: "",
                 endTime: "",
+                displayStart: "",
+                displayEnd: "",
                 notes: "",
                 attendees: []
             },
@@ -60,6 +62,8 @@ class AppointmentCalendar extends Component {
                     startTime: "",
                     endDate: "",
                     endTime: "",
+                    displayStart: "",
+                    displayEnd: "",
                     notes: "",
                     attendees: []
                 },
@@ -87,7 +91,6 @@ class AppointmentCalendar extends Component {
             })
         }
         catch (err) {
-            console.log(err);
         }
     }
 
@@ -105,13 +108,11 @@ class AppointmentCalendar extends Component {
     }
 
     onOpen(day) {
-        console.log("on open")
         this.state.showDrawer.find(x => x.day === day).value = true;
     }
 
     onClose() {
         this.state.showDrawer.forEach(item => {
-            console.log(item);
             item.value = false;
         })
     }
@@ -146,12 +147,12 @@ class AppointmentCalendar extends Component {
             this.props.appointments.forEach(appointment => {
                 if (appointment.startDate === day) {
                     appointments.push(appointment);
-                    details.push(<li key={appointment._id}>{appointment.title}</li>);
+                    details.push(<div><Tag className="tag" color="geekblue" key={appointment._id}>{appointment.title}</Tag></div>);
                     match = true;
                 }
             });
             appointments.forEach(appointment => {
-                content.push(<div key={appointment._id}><Link to={`/dashboard/appointment/${appointment._id}`}>{appointment.title}: {appointment.startTime}-{appointment.endTime}</Link></div>)
+                content.push(<div key={appointment._id}><Link to={`/dashboard/appointment/${appointment._id}`}>{appointment.title}: {appointment.displayStart}-{appointment.displayEnd}</Link></div>)
             })
         }
         if (this.state.fullscreen == true) {
@@ -160,9 +161,9 @@ class AppointmentCalendar extends Component {
                 return (
                     <div className="date">
                         <Popover placement="top" title={title} content={content} trigger="click">
-                            <ul className="appointments">
+                            <div className="appointments">
                                 {details}
-                            </ul>
+                            </div>
                         </Popover>
                     </div>
                 );
@@ -193,8 +194,6 @@ class AppointmentCalendar extends Component {
 
 
     render() {
-        const ButtonGroup = Button.Group;
-
         this.buildDrawerList();
 
         return (

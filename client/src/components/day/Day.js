@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { Table, Icon, Menu } from 'antd';
+import { Table, Icon } from 'antd';
 import { fetchAppointments } from '../../actions/appointmentActions';
 import "./Day.css";
 
@@ -96,7 +96,6 @@ class Day extends Component {
             }
         });
         appointments = this.sortAppointments(appointments);
-        console.log(appointments);
         for (let i = 0; i < 24; i++) {
             let hour = {
                 key: i + 1,
@@ -113,30 +112,8 @@ class Day extends Component {
                 hour.militaryTime = (i) + ':00';
             }
             appointments.forEach(appointment => {
-                let  militaryHour = parseInt(appointment.startTime.substring(0, 2));
-                if (appointment.startTime.length == 7) {
-                    if (appointment.startTime[5] == 'p' && militaryHour != 12) {
-                        console.log(appointment.startTime[5]);
-                        militaryHour = parseInt(appointment.startTime.substring(0, 2)) + 12;
-                        console.log(militaryHour);
-                    }
-                }
-                if (appointment.startTime.length == 6) {
-                    if (appointment.startTime[4] == 'p' && militaryHour != 12) {
-                        console.log(appointment.startTime[4])
-                        militaryHour = parseInt(appointment.startTime.substring(0, 2)) + 12;
-                        console.log(militaryHour);
-                    }
-                }
-                if (militaryHour == hour.militaryTime.substring(0, 2)) {
-                    let minutes = "00";
-                    if (appointment.startTime.length == 7) {
-                        minutes = appointment.startTime.substring(3, 5);
-                    }
-                    if (appointment.startTime.length == 6) {
-                        minutes = appointment.startTime.substring(2, 4);
-                    }
-                    console.log(minutes);
+                if (appointment.startTime.substring(0, 2) == hour.militaryTime.substring(0, 2)) {
+                    let minutes = appointment.startTime.substring(3, 5);
                     let index = null;
                     if (minutes == '00') {
                         index = 0;
@@ -175,8 +152,6 @@ class Day extends Component {
                         index = 11;
                     }
                     for (let k = 0; k <= j - 1; k++) {
-                        console.log(appointment.startTime + " " + appointment.startTimeInMinutes);
-                        console.log(appointments[k].startTime + " " + (appointments[k].startTimeInMinutes + appointments[k].timespan))
                         if (appointment.startTimeInMinutes < (appointments[k].startTimeInMinutes + appointments[k].timespan)
                             && appointment.column === appointments[k].column) {
                             appointment.column++;
@@ -189,7 +164,7 @@ class Day extends Component {
                                 style={{ height: appointment.timespan * 2, marginLeft: appointment.column * 100 }}
                             >
                                 {appointment.title}<br />
-                                {appointment.startTime}
+                                {appointment.displayStart}
                             </span>
                         </Link>
                     </div>
@@ -217,7 +192,7 @@ class Day extends Component {
         return (
             <div>
                 <div className="table-container">
-                    <Table columns={columns} dataSource={dataSource} rowClassName="custom-row" pagination={false} scroll={{ y: 540 }} />
+                    <Table columns={columns} dataSource={dataSource} rowClassName="custom-row" pagination={false} scroll={{ y: 540, x: 800 }} />
                 </div>
                 <div>
                     <Link className="back" to="/dashboard/calendar"><Icon type="left" />Back to Calendar</Link>

@@ -20,9 +20,14 @@ class AppointmentForm extends Component {
         this.onClose = this.onClose.bind(this);
         this.onOpen = this.onOpen.bind(this);
         this.disabledDates = this.disabledDates.bind(this);
+        this.disabledHours = this.disabledHours.bind(this);
+        this.disabledMinutes = this.disabledMinutes.bind(this);
 
         let day = new Date();
         let dd = day.getDate();
+        if (dd < 10) {
+            dd = "0" + dd;
+        }
         let mm = day.getMonth() + 1;
         let yyyy = day.getFullYear();
         let today = yyyy + '-' + mm + '-' + dd;
@@ -47,7 +52,6 @@ class AppointmentForm extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        console.log(this.props.response);
         if (this.props.response._id) {
             if (this.props.response._id != prevProps.response._id) {
                 Modal.success({
@@ -60,49 +64,65 @@ class AppointmentForm extends Component {
     disabledDates(endValue) {
         const startValue = moment(this.state.yesterday);
         if (!endValue || !startValue) {
-          return false;
+            return false;
         }
         return endValue.valueOf() <= startValue.valueOf();
-      }
+    }
+
+    disabledHours() {
+        let arr = [];
+        let end = moment(this.state.startTime, 'h:mm a').hour();
+        for (let i = 0; i < end; i++) {
+            arr.push(i);
+        }
+        return arr;
+    }
+
+    disabledMinutes(selectedHour) {
+        if (selectedHour == moment(this.state.startTime, 'h:mm a').hour()) {
+            let arr = [];
+            let end = moment(this.state.startTime, 'h:mm a').minutes();
+            for (let i = 0; i <= end; i+=5) {
+                arr.push(i);
+            }
+            return arr;
+        }
+    }
 
     setStartDate(date) {
-        console.log( date.format('YYYY-MM-DD'));
         this.setState({ startDate: date.format('YYYY-MM-DD'), endDate: date.format('YYYY-MM-DD') });
     }
 
     setStartTime(time) {
         this.setState({ startTime: time.format("HH:mm") });
-        console.log(this.state.startTime);
     }
 
     setEndDate(date) {
         this.setState({ endDate: date.format('YYYY-MM-DD') });
-        console.log(this.state.endDate);
     }
 
     setEndTime(time) {
         this.setState({ endTime: time.format("HH:mm") });
-        console.log(this.state.endTime);
     }
 
     onChange(e) {
-        this.setState({[e.target.name]: e.target.value});
+        this.setState({ [e.target.name]: e.target.value });
     }
 
     handleSubmit(e) {
         e.preventDefault();
-        console.log(this.state.attendees);
         let newAppt = {
             title: this.state.title,
             startDate: this.state.startDate,
             startTime: this.state.startTime,
             endDate: this.state.endDate,
             endTime: this.state.endTime,
+            displayStart: "",
+            displayEnd: "",
             notes: this.state.notes,
             attendees: this.state.attendees.split(',')
         }
-        let request = {appointment: newAppt, token: this.props.credentials.token};
-        console.log(JSON.stringify(request));
+        let request = { appointment: newAppt, token: this.props.credentials.token };
         this.props.createAppointment(request);
         this.onClose();
     }
@@ -149,6 +169,7 @@ class AppointmentForm extends Component {
                                 use12Hours
                                 minuteStep={5}
                                 format="h:mm a"
+                                value={moment(this.state.startTime, 'h:mm a')}
                                 onChange={this.setStartTime}
                             />
                             <TimePicker
@@ -156,6 +177,9 @@ class AppointmentForm extends Component {
                                 use12Hours
                                 minuteStep={5}
                                 format="h:mm a"
+                                disabledHours={this.disabledHours}
+                                disabledMinutes={this.disabledMinutes}
+                                value={moment(this.state.endTime, 'h:mm a')}
                                 onChange={this.setEndTime}
                             />
                         </FormItem>

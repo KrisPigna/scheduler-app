@@ -15,6 +15,8 @@ public class Appointment {
 	private LocalTime startTime;
 	private LocalDate endDate;
 	private LocalTime endTime;
+	private String displayStart;
+	private String displayEnd;
 	private String notes;
 	private int timespan;
 	private int startTimeInMinutes;
@@ -54,26 +56,8 @@ public class Appointment {
 		this.startDate = startDate;
 	}
 
-	public String getStartTime() {
-		int hour = startTime.getHour();
-		int minutes = startTime.getMinute();
-		String minutesString;
-		String suffix = "am";
-		if (hour >=13) {
-			hour -= 12;
-			suffix = "pm";
-		}
-		if (hour == 12) {
-			suffix = "pm";
-		}
-		if (minutes == 0) {
-			minutesString = "00";
-		}
-		else {
-			minutesString = Integer.toString(minutes);
-		}
-		String time = Integer.toString(hour) + ":" + minutesString + suffix;
-		return time;
+	public LocalTime getStartTime() {
+		return this.startTime;
 	}
 
 	public void setStartTime(LocalTime startTime) {
@@ -88,26 +72,8 @@ public class Appointment {
 		this.endDate = endDate;
 	}
 
-	public String getEndTime() {
-		int hour = endTime.getHour();
-		int minutes = endTime.getMinute();
-		String minutesString;
-		String suffix = "am";
-		if (hour >=13) {
-			hour -= 12;
-			suffix = "pm";
-		}
-		if (hour == 12) {
-			suffix = "pm";
-		}
-		if (minutes == 0) {
-			minutesString = "00";
-		}
-		else {
-			minutesString = Integer.toString(minutes);
-		}
-		String time = Integer.toString(hour) + ":" + minutesString + suffix;
-		return time;
+	public LocalTime getEndTime() {
+		return this.endTime;
 	}
 
 	public void setEndTime(LocalTime endTime) {
@@ -153,5 +119,69 @@ public class Appointment {
 	
 	public int getColumn() {
 		return this.column;
+	}
+
+	public String getDisplayEnd() {
+		return displayEnd;
+	}
+
+	public void setDisplayEnd() {
+		int hour = endTime.getHour();
+		int minutes = endTime.getMinute();
+		String minutesString;
+		String suffix = "am";
+		if (hour >=13) {
+			hour -= 12;
+			suffix = "pm";
+		}
+		if (hour == 12) {
+			suffix = "pm";
+		}
+		if (hour == 0) {
+			hour = 12;
+		}
+		if (minutes == 0) {
+			minutesString = "00";
+		}
+		else if (minutes == 5) {
+			minutesString = "05";
+		}
+		else {
+			minutesString = Integer.toString(minutes);
+		}
+		String time = Integer.toString(hour) + ":" + minutesString + suffix;
+		this.displayEnd = time;
+	}
+
+	public String getDisplayStart() {
+		return displayStart;
+	}
+
+	public void setDisplayStart() {
+		int hour = startTime.getHour();
+		int minutes = startTime.getMinute();
+		String minutesString;
+		String suffix = "am";
+		if (hour >=13) {
+			hour -= 12;
+			suffix = "pm";
+		}
+		if (hour == 12) {
+			suffix = "pm";
+		}
+		if (hour == 0) {
+			hour = 12;
+		}
+		if (minutes == 0) {
+			minutesString = "00";
+		}
+		else if (minutes == 5) {
+			minutesString = "05";
+		}
+		else {
+			minutesString = Integer.toString(minutes);
+		}
+		String time = Integer.toString(hour) + ":" + minutesString + suffix;
+		this.displayStart = time;
 	}
 }
